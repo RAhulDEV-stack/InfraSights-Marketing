@@ -1,0 +1,42 @@
+# Dependencies
+node_modules/
+mail-service/node_modules/
+
+# Environment variables & secrets
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Test outputs & Playwright artifacts
+test-results/
+playwright-report/
+.playwright-mcp/
+blob-report/
+playwright/.cache/
+scripts/*results*.json
+scripts/*report*.json
+
+# Agent & runtime scratch
+.agents/
+.system_generated/
+
+# OS metadata
+.DS_Store
+Thumbs.db
+
+# Preview debug screenshots
+preview-*.png
+image.png
+
+# External reference packages
+InsightOps---San-Path-Monitoring-for-DC-main/
+*.zip

@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /vendor/
+Sitemap: https://infrasights.in/sitemap.xml

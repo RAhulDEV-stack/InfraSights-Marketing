@@ -1,0 +1,51 @@
+services:
+  # Infrasights Transactional Email Backend Service
+  - type: web
+    name: infrasights-mail-service
+    env: node
+    plan: free
+    rootDir: mail-service
+    buildCommand: npm install
+    startCommand: node index.js
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: NODE_ENV
+        value: production
+      - key: ADMIN_NOTIFICATION_EMAIL
+        value: admin@infrasights.in
+      - key: FROM_EMAIL
+        value: admin@infrasights.in
+
+  # Infrasights Marketing Platform & Core REST API
+  - type: web
+    name: infrasights-platform
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    autoDeploy: true
+    domains:
+      - infrasights.in
+      - www.infrasights.in
+    envVars:
+      - key: PORT
+        value: 3000
+      - key: NODE_ENV
+        value: production
+      - key: MAIL_SERVICE_URL
+        fromService:
+          type: web
+          name: infrasights-mail-service
+          property: host
+      - key: VENDOR_SECRET_KEY
+        sync: false
+      - key: VENDOR_ADMIN_EMAIL
+        value: admin@infrasights.in
+      - key: VENDOR_ADMIN_PASSWORD
+        sync: false
+      - key: JWT_SECRET
+        sync: false

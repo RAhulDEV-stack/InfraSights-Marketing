@@ -1,0 +1,1402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Infrasights v2.10 | Enterprise SAN Infrastructure Visibility & Monitoring</title>
+  <meta name="description" content="Infrasights v2.10 provides centralized Fibre Channel SAN visibility with data collected directly from SAN switches. Real-time buffer credit tracking, SFP optics diagnostics, and fabric health scoring without intermediary middleware.">
+  <meta name="keywords" content="SAN monitoring, Fibre Channel, Enterprise Director, Fabric Switch, buffer-to-buffer credits, SFP optics, storage infrastructure, Infrasights v2.10">
+  
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://infrasights.in/">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://infrasights.in/">
+  <meta property="og:site_name" content="Infrasights">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:title" content="Infrasights v2.10 | Your SAN Infrastructure. One Clear Picture.">
+  <meta property="og:description" content="Centralized SAN visibility collected directly from Fibre Channel switches. Deterministic telemetry and operational clarity for enterprise storage teams.">
+  <meta property="og:image" content="https://infrasights.in/assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Infrasights v2.10 - Enterprise SAN Infrastructure Observability Platform">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Infrasights v2.10 | Enterprise SAN Infrastructure Observability">
+  <meta name="twitter:description" content="Direct switch-level SAN observability. Real-time buffer-to-buffer credit monitoring, SFP optics diagnostics, and fabric health scoring.">
+  <meta name="twitter:image" content="https://infrasights.in/assets/og-image.png">
+  <meta name="twitter:alt" content="Infrasights v2.10 Enterprise SAN Platform">
+
+  <!-- Structured Data: JSON-LD Graph -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "SoftwareApplication",
+        "@id": "https://infrasights.in/#software",
+        "name": "Infrasights v2.10",
+        "operatingSystem": "All (Appliance/Browser)",
+        "applicationCategory": "BusinessApplication",
+        "softwareVersion": "2.10.4",
+        "url": "https://infrasights.in/",
+        "description": "Enterprise SAN infrastructure observability platform providing direct switch-level monitoring, buffer credit tracking, and fabric optics health analysis.",
+        "image": "https://infrasights.in/assets/og-image.png",
+        "publisher": {
+          "@type": "Organization",
+          "@id": "https://infrasights.in/#organization"
+        }
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://infrasights.in/#organization",
+        "name": "Infrasights",
+        "url": "https://infrasights.in/",
+        "logo": "https://infrasights.in/assets/og-image.png",
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "email": "admin@infrasights.in",
+          "contactType": "technical support"
+        }
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://infrasights.in/#website",
+        "url": "https://infrasights.in/",
+        "name": "Infrasights",
+        "publisher": {
+          "@id": "https://infrasights.in/#organization"
+        }
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://infrasights.in/#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is Infrasights?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Infrasights is a specialized SAN infrastructure monitoring and observability platform designed to help storage and infrastructure teams understand the health, behavior, and congestion of their Fibre Channel environment from a centralized operational view."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does Infrasights require external management software to operate?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. Infrasights v2.10 collects data directly from SAN switches via native REST APIs, SNMPv3, and secure SSH polling. External element managers or intermediary data brokers are neither required nor used."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Which SAN switch environments are supported?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Infrasights supports modern enterprise Fibre Channel director and edge switches across all leading multi-vendor platforms. Support includes 16G, 32G, and 64G FC optics, modular blades, and high-speed ISL trunks."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How is Infrasights deployed in our data center?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Infrasights is packaged as a lightweight virtual appliance (VMware OVF / KVM) or containerized collector that resides within your management network. It operates read-only and requires zero agent installation on compute hosts or storage arrays."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What information is needed to request a deployment?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Only high-level qualification parameters: switch vendor, approximate switch count, fabric topology, and target timeline. We never ask for switch passwords, SNMP community strings, or private infrastructure keys on web forms."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How can our organization contact the Infrasights team?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "You can submit a deployment request directly through this portal or reach out directly to our enterprise engineering team at admin@infrasights.in."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2300f2fe' stroke-width='2'><rect x='2' y='2' width='20' height='8' rx='2'/><rect x='2' y='14' width='20' height='8' rx='2'/></svg>">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- ========================================================================
+       Site Navigation
+       ======================================================================== -->
+  <header class="site-header">
+    <div class="container nav-container">
+      <a href="#hero" class="brand-logo" aria-label="Infrasights Home">
+        <div class="brand-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
+            <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
+            <line x1="6" y1="6" x2="6.01" y2="6"></line>
+            <line x1="6" y1="18" x2="6.01" y2="18"></line>
+          </svg>
+        </div>
+        <span>Infrasights</span>
+        <span class="brand-badge">v2.10</span>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links">
+          <li><a href="#hero" class="nav-link active">Home</a></li>
+          <li><a href="#comparison" class="nav-link">The Challenge</a></li>
+          <li><a href="#capabilities" class="nav-link">Platform</a></li>
+          <li><a href="#architecture" class="nav-link">How It Works</a></li>
+          <li><a href="#interface" class="nav-link">Interface</a></li>
+          <li><a href="#deployment" class="nav-link">Deployment</a></li>
+          <li><a href="#faq" class="nav-link">FAQ</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <span id="header-user-tag" class="hud-pill" style="display: none;"></span>
+        <button id="header-auth-btn" class="auth-status-btn">Sign In</button>
+        <button class="btn btn-primary btn-sm trigger-deployment-cta">Request a Deployment</button>
+        <button id="mobile-toggle-btn" class="mobile-menu-btn" aria-label="Toggle Menu">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer -->
+  <div id="mobile-drawer" style="display: none; background: #0c1322; border-bottom: 1px solid var(--border-medium); padding: 1.5rem; text-align: center;">
+    <ul style="list-style: none; display: flex; flex-direction: column; gap: 1rem;">
+      <li><a href="#hero" class="nav-link">Home</a></li>
+      <li><a href="#comparison" class="nav-link">The Challenge</a></li>
+      <li><a href="#capabilities" class="nav-link">Platform</a></li>
+      <li><a href="#architecture" class="nav-link">How It Works</a></li>
+      <li><a href="#interface" class="nav-link">Interface</a></li>
+      <li><a href="#deployment" class="nav-link">Deployment</a></li>
+      <li><a href="#faq" class="nav-link">FAQ</a></li>
+      <li style="margin-top: 0.5rem;"><button id="mobile-auth-btn" class="btn btn-outline btn-sm" style="width: 100%;">Sign In</button></li>
+      <li><button class="btn btn-primary btn-sm trigger-deployment-cta" style="width: 100%;">Request a Deployment</button></li>
+    </ul>
+  </div>
+
+  <main>
+    <!-- ========================================================================
+         Hero Section with Living SAN Topology Canvas
+         ======================================================================== -->
+    <section id="hero" class="hero-section">
+      <div class="container hero-grid">
+        <div class="hero-content">
+          <div class="hero-version-pill">
+            <span class="version-tag">RELEASE v2.10</span>
+            <span>Direct Fibre Channel Infrastructure Observability</span>
+          </div>
+
+          <h1 class="hero-title">
+            Your SAN infrastructure. <br>
+            <span class="text-gradient">One clear picture.</span>
+          </h1>
+
+          <p class="hero-desc">
+            Infrasights gives infrastructure teams a centralized way to monitor and understand their SAN environment, with data collected directly from SAN switches. No intermediary software required. Zero agent footprint.
+          </p>
+
+          <div class="hero-ctas">
+            <button class="btn btn-primary trigger-deployment-cta">
+              <span>Request a Deployment</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </button>
+            <a href="#capabilities" class="btn btn-secondary">
+              <span>Explore Platform</span>
+            </a>
+          </div>
+
+          <div class="hero-trust">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+            <span>Built for enterprise storage, SAN administrators, and data center operations teams.</span>
+          </div>
+        </div>
+
+        <!-- Living SAN Topology Canvas -->
+        <div class="canvas-container">
+          <div class="canvas-hud">
+            <div class="hud-pill active">
+              <span class="pulse-dot" style="display:inline-block;width:6px;height:6px;background:#00f2fe;border-radius:50%;margin-right:4px;"></span>
+              LIVE TOPOLOGY TELEMETRY (v2.10)
+            </div>
+            <div class="hud-pill">DIRECT SWITCH POLLING (1s CADENCE)</div>
+          </div>
+
+          <div class="canvas-viewport">
+            <canvas id="san-topology-canvas"></canvas>
+            <div id="canvas-tooltip" class="canvas-tooltip"></div>
+          </div>
+
+          <div class="canvas-controls">
+            <div class="canvas-legend">
+              <div class="legend-item"><span class="legend-dot switch"></span><span>FC Switch</span></div>
+              <div class="legend-item"><span class="legend-dot isl"></span><span>ISL Trunk</span></div>
+              <div class="legend-item"><span class="legend-dot storage"></span><span>Storage/Host</span></div>
+            </div>
+            <button id="toggle-congestion-btn" class="btn btn-outline btn-sm" style="font-size:0.75rem;padding:0.35rem 0.75rem;">
+              Simulate Buffer Wait
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Metrics Banner -->
+    <section class="metrics-banner">
+      <div class="container">
+        <div class="metrics-grid">
+          <div class="metric-item">
+            <div class="metric-val">100%</div>
+            <div class="metric-label">Direct Switch Telemetry (Agentless)</div>
+          </div>
+          <div class="metric-item">
+            <div class="metric-val">Sub-Sec</div>
+            <div class="metric-label">Hardware Register Polling Resolution</div>
+          </div>
+          <div class="metric-item">
+            <div class="metric-val">Zero</div>
+            <div class="metric-label">Agent Overhead on Compute Hosts</div>
+          </div>
+          <div class="metric-item">
+            <div class="metric-val">v2.10</div>
+            <div class="metric-label">Multi-Vendor Enterprise Fibre Channel</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================
+         The Visibility Challenge (Before vs. After)
+         ======================================================================== -->
+    <section id="comparison" class="comparison-section">
+      <div class="container">
+        <div class="section-tag">
+          <span class="pulse-dot"></span>
+          Operational Reality
+        </div>
+        <h2 class="section-title">The SAN Visibility Challenge</h2>
+        <p class="section-subtitle">
+          Fibre Channel fabrics are mission-critical, yet diagnosing health and congestion often requires manually piecing together fragmented switch CLIs and disconnected screens.
+        </p>
+
+        <div class="comparison-grid">
+          <!-- Before Card -->
+          <div class="compare-card before">
+            <div class="compare-header">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+              <h3 class="compare-title">Without Infrasights (Fragmented Ops)</h3>
+            </div>
+            <ul class="compare-list">
+              <li>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                <span><strong>Device-by-Device CLI Inspection:</strong> Engineers manually SSH into individual switches to parse <code>porterrshow</code> and <code>show interface counters</code>.</span>
+              </li>
+              <li>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                <span><strong>Hidden Buffer Credit Starvation:</strong> Slow-drain devices deplete buffer credits quietly, cascading across ISLs before alarms trigger.</span>
+              </li>
+              <li>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                <span><strong>Heavy Middleware Overhead:</strong> Relying on multi-tier management applications introduces licensing costs, delays, and software complexity.</span>
+              </li>
+              <li>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                <span><strong>Knowledge Concentration:</strong> SAN troubleshooting depends heavily on a handful of senior specialists who know where to look.</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- After Card -->
+          <div class="compare-card after">
+            <div class="compare-header">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="9 12 12 15 16 9"></polyline></svg>
+              <h3 class="compare-title">With Infrasights v2.10 (Operational Clarity)</h3>
+            </div>
+            <ul class="compare-list">
+              <li>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>Centralized SAN Visibility:</strong> Unified health, status, and port metrics across all fabrics in a single operational dashboard.</span>
+              </li>
+              <li>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>Direct Switch Data Collection:</strong> Direct API and telemetry ingestion straight from Fibre Channel switches without proprietary intermediaries.</span>
+              </li>
+              <li>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>Deterministic Congestion Diagnostics:</strong> Immediate tracking of zero-credit transitions, optical dBm degradation, and CRC bit errors.</span>
+              </li>
+              <li>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>Accessible SAN Operations:</strong> Empower the broader infrastructure and data center team to understand and triage fabric status quickly.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================
+         Core Capabilities (Platform Section)
+         ======================================================================== -->
+    <section id="capabilities" class="capabilities-section">
+      <div class="container">
+        <div class="section-tag">
+          <span class="pulse-dot"></span>
+          Platform Capabilities
+        </div>
+        <h2 class="section-title">Engineered for Fibre Channel Storage Operations</h2>
+        <p class="section-subtitle">
+          Infrasights v2.10 focuses on verified, deterministic hardware telemetry collected straight from director and edge switches.
+        </p>
+
+        <div class="capabilities-grid">
+          <!-- Card 1 -->
+          <div class="capability-card">
+            <div class="card-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+            </div>
+            <h3 class="card-title">Direct Switch Data Collection</h3>
+            <p class="card-desc">
+              Connects directly to SAN switches via secure REST APIs, SNMP, and SSH. Bypasses intermediate management software, eliminating extra points of failure and licensing overhead.
+            </p>
+            <span class="card-badge">Zero Intermediary Dependency</span>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="capability-card">
+            <div class="card-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            </div>
+            <h3 class="card-title">Buffer Credit Starvation Tracking</h3>
+            <p class="card-desc">
+              Continuously monitors buffer-to-buffer (B2B) credit timers and zero-credit states. Instantly isolates slow-drain devices before backpressure degrades ISL trunks and stalls tier-0 storage.
+            </p>
+            <span class="card-badge">Deterministic B2B Monitoring</span>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="capability-card">
+            <div class="card-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            </div>
+            <h3 class="card-title">SFP Physical Layer & Optics Diagnostics</h3>
+            <p class="card-desc">
+              Tracks Digital Optical Monitoring (DOM) metrics including TX/RX optical power (dBm), laser bias current, temperature, and supply voltage to detect degrading transceivers and cables prior to link flap.
+            </p>
+            <span class="card-badge">DOM Transceiver Metrics</span>
+          </div>
+
+          <!-- Card 4 -->
+          <div class="capability-card">
+            <div class="card-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            </div>
+            <h3 class="card-title">Hardware Error Register Correlation</h3>
+            <p class="card-desc">
+              Aggregates raw hardware counters—CRC errors, bit error rates (BER), encoding-out errors, and Class 3 discards—into prioritized fabric health indicators so you can distinguish dirty fibers from oversubscription.
+            </p>
+            <span class="card-badge">Register-Level Accuracy</span>
+          </div>
+
+          <!-- Card 5 -->
+          <div class="capability-card">
+            <div class="card-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            </div>
+            <h3 class="card-title">Fabric Topology & WWPN Zoning Audit</h3>
+            <p class="card-desc">
+              Provides live visualization of active zones, WWPN logins (FLOGI/PLOGI), and multipath fabric paths. Understand exactly which targets and initiators share links and where congestion can spread.
+            </p>
+            <span class="card-badge">Name Server Integration</span>
+          </div>
+
+          <!-- Card 6 -->
+          <div class="capability-card">
+            <div class="card-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+            </div>
+            <h3 class="card-title">Focused Operational Investigation</h3>
+            <p class="card-desc">
+              Streamline investigations with unified search across WWPNs, switch hostnames, port aliases, and fabrics. Move directly from a high-level status indicator to the specific offending port in seconds.
+            </p>
+            <span class="card-badge">Fast Root-Cause Triage</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================
+         How It Works (Interactive Architecture Diagram)
+         ======================================================================== -->
+    <section id="architecture" class="architecture-section">
+      <div class="container">
+        <div class="section-tag">
+          <span class="pulse-dot"></span>
+          System Architecture
+        </div>
+        <h2 class="section-title">Direct Switch Data Pipeline</h2>
+        <p class="section-subtitle">
+          Infrasights implements a direct, secure data flow that collects telemetry straight from your Fibre Channel switches. Click any node below to inspect implementation specifications:
+        </p>
+
+        <!-- Interactive Architecture Nodes -->
+        <div class="architecture-diagram">
+          <div class="arch-node active" data-step="switches">
+            <div class="node-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/></svg>
+            </div>
+            <div class="node-title">SAN Switches</div>
+            <div class="node-desc">Core & Edge Directors</div>
+          </div>
+
+          <div class="arch-arrow">→</div>
+
+          <div class="arch-node" data-step="collection">
+            <div class="node-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            </div>
+            <div class="node-title">Collection Layer</div>
+            <div class="node-desc">Direct Polling Engine</div>
+          </div>
+
+          <div class="arch-arrow">→</div>
+
+          <div class="arch-node" data-step="processing">
+            <div class="node-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            </div>
+            <div class="node-title">Normalization</div>
+            <div class="node-desc">Register Parsing</div>
+          </div>
+
+          <div class="arch-arrow">→</div>
+
+          <div class="arch-node" data-step="database">
+            <div class="node-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+            </div>
+            <div class="node-title">Infrasights DB</div>
+            <div class="node-desc">Time-Series Store</div>
+          </div>
+
+          <div class="arch-arrow">→</div>
+
+          <div class="arch-node" data-step="apis">
+            <div class="node-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+            </div>
+            <div class="node-title">Backend APIs</div>
+            <div class="node-desc">gRPC & REST</div>
+          </div>
+
+          <div class="arch-arrow">→</div>
+
+          <div class="arch-node" data-step="ui">
+            <div class="node-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            </div>
+            <div class="node-title">Operations UI</div>
+            <div class="node-desc">Unified Dashboard</div>
+          </div>
+
+          <div class="arch-arrow">→</div>
+
+          <div class="arch-node" data-step="team">
+            <div class="node-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <div class="node-title">Storage Team</div>
+            <div class="node-desc">Faster Triage</div>
+          </div>
+        </div>
+
+        <!-- Dynamic Architecture Detail Box -->
+        <div class="arch-detail-panel">
+          <div style="font-size: 2.2rem; color: var(--cyan-400);">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          </div>
+          <div class="arch-detail-text">
+            <h4 id="arch-detail-title">1. SAN Switches (Direct Data Origin)</h4>
+            <p id="arch-detail-text">
+              Infrasights communicates directly with enterprise Fibre Channel director and edge switches. Telemetry is collected directly from switch control planes via native REST APIs, SNMPv3, and secure SSH polling without requiring intermediate management proxies or external element managers.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================
+         Interactive Operations Interface Concept Mockup
+         ======================================================================== -->
+    <section id="interface" class="interface-section">
+      <div class="container">
+        <div class="section-tag">
+          <span class="pulse-dot"></span>
+          Operator Experience
+        </div>
+        <h2 class="section-title">Infrasights v2.10 Operational Dashboard</h2>
+        <p class="section-subtitle">
+          Engineered for fast at-a-glance status assessments and drill-down investigation into ports, optics, and buffer credit states.
+        </p>
+
+        <div class="mockup-window">
+          <!-- Window Header -->
+          <div class="mockup-header">
+            <div class="window-dots">
+              <span class="window-dot red"></span>
+              <span class="window-dot yellow"></span>
+              <span class="window-dot green"></span>
+            </div>
+            <div class="mockup-title-bar">infrasights://fabric-ops/dashboard.v2.10</div>
+            <span class="mockup-badge">DIRECT POLLING ACTIVE</span>
+          </div>
+
+          <!-- Navigation Tabs -->
+          <div class="mockup-tabs">
+            <button class="mockup-tab active" data-tab="tab-overview">Fabric Overview</button>
+            <button class="mockup-tab" data-tab="tab-optics">Port Telemetry & Optics</button>
+            <button class="mockup-tab" data-tab="tab-switches">Switch Inventory (Direct)</button>
+            <button class="mockup-tab" data-tab="tab-congestion">Congestion Alarms (B2B)</button>
+          </div>
+
+          <!-- Tab Content Panes -->
+          <div class="mockup-body">
+            <!-- Pane 1: Fabric Overview -->
+            <div id="tab-overview" class="mockup-tab-pane">
+              <div class="dashboard-kpis">
+                <div class="kpi-card">
+                  <div class="kpi-title">Monitored Fabrics</div>
+                  <div class="kpi-value">2 (A / B)</div>
+                  <div class="kpi-status">Dual Fabric Redundant</div>
+                </div>
+                <div class="kpi-card">
+                  <div class="kpi-title">Active FC Switches</div>
+                  <div class="kpi-value">28</div>
+                  <div class="kpi-status">100% Direct Polled</div>
+                </div>
+                <div class="kpi-card">
+                  <div class="kpi-title">Monitored Ports</div>
+                  <div class="kpi-value">1,152</div>
+                  <div class="kpi-status">32G / 64G Active</div>
+                </div>
+                <div class="kpi-card">
+                  <div class="kpi-title">Fabric Health Score</div>
+                  <div class="kpi-value" style="color: #34d399;">99.85%</div>
+                  <div class="kpi-status">Zero Drop State</div>
+                </div>
+              </div>
+
+              <div class="telemetry-table-container">
+                <table class="telemetry-table">
+                  <thead>
+                    <tr>
+                      <th>Switch Name</th>
+                      <th>Fabric</th>
+                      <th>Model & Firmware</th>
+                      <th>Direct Polling Protocol</th>
+                      <th>B2B Credit State</th>
+                      <th>Optical Status</th>
+                      <th>Health Index</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td style="color:#00f2fe;font-weight:600;">Core-Director-01A</td>
+                      <td>Fabric A</td>
+                      <td>Core-Director-01 (Gen 7 FC)</td>
+                      <td>REST API (TLS 1.3)</td>
+                      <td><span class="status-badge healthy">100% Nominal</span></td>
+                      <td><span class="status-badge healthy">TX: -1.8 / RX: -2.1 dBm</span></td>
+                      <td><strong style="color:#34d399">100%</strong></td>
+                    </tr>
+                    <tr>
+                      <td style="color:#00f2fe;font-weight:600;">Core-Director-01B</td>
+                      <td>Fabric B</td>
+                      <td>Core-Director-02 (Enterprise Modular FC)</td>
+                      <td>Direct SSH / SNMPv3</td>
+                      <td><span class="status-badge healthy">99.9% Nominal</span></td>
+                      <td><span class="status-badge healthy">TX: -1.9 / RX: -2.3 dBm</span></td>
+                      <td><strong style="color:#34d399">99.8%</strong></td>
+                    </tr>
+                    <tr>
+                      <td style="color:#00f2fe;font-weight:600;">Edge-SAN-SW-04A</td>
+                      <td>Fabric A</td>
+                      <td>Edge-SAN-SW-04 (High-Density 32G FC)</td>
+                      <td>REST API (Direct)</td>
+                      <td><span class="status-badge degraded">84.2% (Slow Drain)</span></td>
+                      <td><span class="status-badge degraded">Port 14 RX Low (-6.2 dBm)</span></td>
+                      <td><strong style="color:#fbbf24">88.5%</strong></td>
+                    </tr>
+                    <tr>
+                      <td style="color:#00f2fe;font-weight:600;">Edge-SAN-SW-04B</td>
+                      <td>Fabric B</td>
+                      <td>Edge-SAN-SW-05 (Fixed-Port 32G FC)</td>
+                      <td>Direct REST</td>
+                      <td><span class="status-badge healthy">100% Nominal</span></td>
+                      <td><span class="status-badge healthy">TX: -2.0 / RX: -2.2 dBm</span></td>
+                      <td><strong style="color:#34d399">100%</strong></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Pane 2: Port Metrics & Optics -->
+            <div id="tab-optics" class="mockup-tab-pane" style="display: none;">
+              <div class="telemetry-table-container">
+                <table class="telemetry-table">
+                  <thead>
+                    <tr>
+                      <th>Port ID</th>
+                      <th>Alias / WWPN</th>
+                      <th>Speed</th>
+                      <th>TX Optical Power</th>
+                      <th>RX Optical Power</th>
+                      <th>Laser Temp</th>
+                      <th>CRC / Bit Errors</th>
+                      <th>Diagnostic Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>fc1/14 (Core-01A)</td>
+                      <td>NVMe-Target-Port-01</td>
+                      <td>64 Gbps</td>
+                      <td>-1.85 dBm</td>
+                      <td>-2.12 dBm</td>
+                      <td>38.2°C</td>
+                      <td>0 / 0</td>
+                      <td><span class="status-badge healthy">Normal DOM</span></td>
+                    </tr>
+                    <tr>
+                      <td>fc1/18 (Edge-04A)</td>
+                      <td>DB-Cluster-HBA-02</td>
+                      <td>32 Gbps</td>
+                      <td>-2.10 dBm</td>
+                      <td style="color:#fbbf24;font-weight:bold;">-6.42 dBm (Marginal)</td>
+                      <td>44.8°C</td>
+                      <td style="color:#fbbf24">14 CRC / hr</td>
+                      <td><span class="status-badge degraded">Check Patch Cable</span></td>
+                    </tr>
+                    <tr>
+                      <td>fc2/01 (Core-01B)</td>
+                      <td>ISL-Trunk-Link-01</td>
+                      <td>128G Trunk</td>
+                      <td>-1.74 dBm</td>
+                      <td>-1.92 dBm</td>
+                      <td>36.5°C</td>
+                      <td>0 / 0</td>
+                      <td><span class="status-badge healthy">ISL Healthy</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Pane 3: Switch Inventory -->
+            <div id="tab-switches" class="mockup-tab-pane" style="display: none;">
+              <div class="telemetry-table-container">
+                <table class="telemetry-table">
+                  <thead>
+                    <tr>
+                      <th>Switch Name</th>
+                      <th>IP Address</th>
+                      <th>Role</th>
+                      <th>Firmware</th>
+                      <th>Total Ports</th>
+                      <th>Active Logins</th>
+                      <th>Direct Polling Latency</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Core-Director-01A</td>
+                      <td>10.140.12.11</td>
+                      <td>Fabric A Core Director</td>
+                      <td>Firmware v9.2.1a</td>
+                      <td>256 Ports</td>
+                      <td>184 FLOGI</td>
+                      <td style="color:#34d399">18 ms</td>
+                    </tr>
+                    <tr>
+                      <td>Core-Director-01B</td>
+                      <td>10.140.12.12</td>
+                      <td>Fabric B Core Director</td>
+                      <td>Firmware v9.3(2)</td>
+                      <td>256 Ports</td>
+                      <td>180 FLOGI</td>
+                      <td style="color:#34d399">22 ms</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Pane 4: Congestion Alarms -->
+            <div id="tab-congestion" class="mockup-tab-pane" style="display: none;">
+              <div style="background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 6px; padding: 1.25rem; font-family: var(--font-mono); font-size: 0.8rem;">
+                <div style="color: #fbbf24; font-weight: bold; margin-bottom: 0.5rem;">[ALERT INF-B2B-104]: Zero-Credit State Detected on Edge-SAN-SW-04A, Port 14</div>
+                <div style="color: #94a3b8; line-height: 1.6;">
+                  • <strong>Cause:</strong> Initiator WWPN <code>21:00:00:24:ff:58:12:a4</code> returned 0 credits for > 15ms intervals.<br>
+                  • <strong>Impact:</strong> Class 3 frames queued; potential backpressure on ISL trunk 2.<br>
+                  • <strong>Deterministic Remediation Guide:</strong> Inspect initiator queue depth or replace patch cord on SFP transceiver port 14.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================
+         Who Infrasights Helps (Personas)
+         ======================================================================== -->
+    <section class="audience-section">
+      <div class="container">
+        <div class="section-tag">
+          <span class="pulse-dot"></span>
+          Audience & Teams
+        </div>
+        <h2 class="section-title">Designed for Enterprise Storage & Infrastructure Teams</h2>
+        <p class="section-subtitle">
+          Infrasights speaks the language of Fibre Channel and aligns with the operational workflows of data center teams.
+        </p>
+
+        <div class="audience-grid">
+          <div class="audience-card">
+            <div class="persona-tag">Technical Evaluator</div>
+            <h3 class="persona-title">SAN & Storage Administrators</h3>
+            <p class="persona-desc">
+              Understand data collection directly from switches, eliminate manual CLI scraping, and identify faulty SFP optics and buffer credit drops before storage LUNs experience I/O pauses.
+            </p>
+          </div>
+
+          <div class="audience-card">
+            <div class="persona-tag">Operational Owner</div>
+            <h3 class="persona-title">Infrastructure Operations Managers</h3>
+            <p class="persona-desc">
+              Gain a unified operational picture across multi-vendor fabrics. Standardize day-to-day SAN monitoring and reduce dependence on a few senior specialists for routine triage.
+            </p>
+          </div>
+
+          <div class="audience-card">
+            <div class="persona-tag">Business Approver</div>
+            <h3 class="persona-title">IT Directors & Infrastructure Heads</h3>
+            <p class="persona-desc">
+              Protect mission-critical storage reliability, eliminate costly proprietary management appliances, and establish a clear, secure on-premises deployment posture.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================
+         Deployment Journey
+         ======================================================================== -->
+    <section id="deployment" class="journey-section">
+      <div id="roadmap" style="position:relative;top:-100px;"></div>
+      <div class="container">
+        <div class="section-tag">
+          <span class="pulse-dot"></span>
+          Deployment Engagement
+        </div>
+        <h2 class="section-title">Structured Path from Evaluation to Production</h2>
+        <p class="section-subtitle">
+          Request an Infrasights v2.10 deployment through our structured enterprise qualification process.
+        </p>
+
+        <div class="journey-steps">
+          <div class="journey-step">
+            <div class="step-num">01</div>
+            <h3 class="step-title">Account Registration</h3>
+            <p class="step-desc">Create your business account to establish secure authenticated communication for your enterprise deployment request.</p>
+          </div>
+
+          <div class="journey-step">
+            <div class="step-num">02</div>
+            <h3 class="step-title">SAN Scope Questionnaire</h3>
+            <p class="step-desc">Specify switch counts, fabric architecture, fabric count, and preferred collector deployment topology (VMware/KVM).</p>
+          </div>
+
+          <div class="journey-step">
+            <div class="step-num">03</div>
+            <h3 class="step-title">Technical Review</h3>
+            <p class="step-desc">Our infrastructure engineers review access parameters, read-only credential models, and network boundaries.</p>
+          </div>
+
+          <div class="journey-step">
+            <div class="step-num">04</div>
+            <h3 class="step-title">Deployment & Onboarding</h3>
+            <p class="step-desc">Deploy the Infrasights collector appliance and start streaming real-time SAN telemetry in under an hour.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================
+         Frequently Asked Questions (FAQ)
+         ======================================================================== -->
+    <section id="faq" class="faq-section">
+      <div class="container faq-container">
+        <div class="section-tag">
+          <span class="pulse-dot"></span>
+          Common Questions
+        </div>
+        <h2 class="section-title">Frequently Asked Questions</h2>
+        <p class="section-subtitle">
+          Key architectural and operational questions regarding Infrasights v2.10.
+        </p>
+
+        <div class="faq-list">
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>What is Infrasights?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <div class="faq-content">
+                Infrasights is a specialized SAN infrastructure monitoring and observability platform designed to help storage and infrastructure teams understand the health, behavior, and congestion of their Fibre Channel environment from a centralized operational view.
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>Does Infrasights require external management software to operate?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <div class="faq-content">
+                <strong>No.</strong> Infrasights v2.10 collects data directly from SAN switches via native REST APIs, SNMPv3, and secure SSH polling. External element managers or intermediary data brokers are neither required nor used.
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>Which SAN switch environments are supported?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <div class="faq-content">
+                Infrasights supports modern enterprise Fibre Channel director and edge switches across all leading multi-vendor platforms. Support includes 16G, 32G, and 64G FC optics, modular blades, and high-speed ISL trunks.
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>How is Infrasights deployed in our data center?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <div class="faq-content">
+                Infrasights is packaged as a lightweight virtual appliance (VMware OVF / KVM) or containerized collector that resides within your management network. It operates read-only and requires zero agent installation on compute hosts or storage arrays.
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>What information is needed to request a deployment?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <div class="faq-content">
+                Only high-level qualification parameters: switch vendor, approximate switch count, fabric topology, and target timeline. We never ask for switch passwords, SNMP community strings, or private infrastructure keys on web forms.
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>How can our organization contact the Infrasights team?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <div class="faq-content">
+                You can submit a deployment request directly through this portal or reach out directly to our enterprise engineering team at <code>admin@infrasights.in</code>.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================
+         Final Call to Action
+         ======================================================================== -->
+    <section class="cta-banner-section">
+      <div class="container">
+        <div class="cta-banner-box">
+          <h2 class="cta-banner-title">Bring Clarity to Your SAN Environment</h2>
+          <p class="cta-banner-desc">
+            Move from fragmented, switch-by-switch troubleshooting to deterministic, centralized operational visibility with Infrasights v2.10.
+          </p>
+          <button class="btn btn-primary trigger-deployment-cta">
+            <span>Request a Deployment</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ========================================================================
+       Footer
+       ======================================================================== -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="brand-logo" style="margin-bottom:0.5rem">
+            <div class="brand-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/></svg>
+            </div>
+            <span>Infrasights</span>
+            <span class="brand-badge">v2.10</span>
+          </div>
+          <p class="footer-desc">
+            A centralized visibility and monitoring platform for SAN infrastructure. Direct Fibre Channel switch telemetry for enterprise operations teams.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Platform</h4>
+          <ul class="footer-links">
+            <li><a href="#capabilities" class="footer-link">Direct Collection</a></li>
+            <li><a href="#capabilities" class="footer-link">B2B Credit Analysis</a></li>
+            <li><a href="#capabilities" class="footer-link">SFP Optics Monitoring</a></li>
+            <li><a href="#capabilities" class="footer-link">Error Correlation</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Architecture</h4>
+          <ul class="footer-links">
+            <li><a href="#architecture" class="footer-link">Data Pipeline</a></li>
+            <li><a href="#comparison" class="footer-link">Agentless Direct Design</a></li>
+            <li><a href="#deployment" class="footer-link">Deployment Model</a></li>
+            <li><a href="#faq" class="footer-link">Technical FAQ</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Engagement</h4>
+          <ul class="footer-links">
+            <li><a href="#" class="footer-link trigger-deployment-cta">Request Deployment</a></li>
+            <li><a href="#" class="footer-link" id="footer-auth-link" onclick="openModal('auth-modal'); return false;">Account Sign In</a></li>
+            <li><a href="#" class="footer-link" onclick="openModal('privacy-modal'); return false;">Privacy Policy</a></li>
+            <li><a href="#" class="footer-link" onclick="openModal('terms-modal'); return false;">Terms of Service</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>© 2026 Infrasights. All rights reserved. Formerly known as InsightOps.</div>
+        <div class="footer-badge">Current Release: Infrasights v2.10.4-release</div>
+      </div>
+    </div>
+  </footer>
+
+  <style>
+    #app-toast {
+      pointer-events: none !important;
+    }
+    html, body {
+      overflow-x: hidden !important;
+      max-width: 100vw !important;
+    }
+    .modal-backdrop {
+      align-items: center !important;
+      justify-content: center !important;
+      overflow-y: auto !important;
+      padding: 0.5rem !important;
+    }
+    .modal-backdrop.open {
+      display: flex !important;
+    }
+    .modal-dialog {
+      max-height: 94vh !important;
+      overflow-y: auto !important;
+      margin: auto !important;
+      transform: none !important;
+      box-sizing: border-box !important;
+    }
+    @media (max-width: 640px) {
+      .modal-dialog {
+        width: 94% !important;
+        max-width: 94% !important;
+        margin: auto !important;
+        padding: 0 !important;
+      }
+      .modal-header {
+        padding: 0.75rem 1rem 0.5rem !important;
+      }
+      .modal-title {
+        font-size: 1.15rem !important;
+      }
+      .modal-subtitle {
+        font-size: 0.78rem !important;
+        margin-bottom: 0.25rem !important;
+        line-height: 1.3 !important;
+      }
+      #auth-modal-notice {
+        margin-top: 0.35rem !important;
+        padding: 0.35rem 0.6rem !important;
+        font-size: 0.78rem !important;
+      }
+      .modal-body {
+        padding: 0.75rem 1rem 1rem !important;
+      }
+      .form-group {
+        margin-bottom: 0.45rem !important;
+      }
+      .form-label {
+        margin-bottom: 0.15rem !important;
+        font-size: 0.78rem !important;
+      }
+      .form-input, .form-select, .form-textarea {
+        padding: 0.4rem 0.65rem !important;
+        font-size: 0.85rem !important;
+      }
+      .form-checkbox-label {
+        font-size: 0.75rem !important;
+        line-height: 1.25 !important;
+      }
+      .wizard-stepper {
+        justify-content: space-around !important;
+        margin-bottom: 0.65rem !important;
+        padding-bottom: 0.5rem !important;
+      }
+      .wizard-step span:not(.wizard-step-circle) {
+        display: none !important;
+      }
+      .wizard-step-circle {
+        width: 26px !important;
+        height: 26px !important;
+        font-size: 0.75rem !important;
+      }
+    }
+  </style>
+
+  <!-- ========================================================================
+       MODAL: Authentication (Login / Register / Forgot)
+       ======================================================================== -->
+  <div id="auth-modal" class="modal-backdrop">
+    <div class="modal-dialog">
+      <button class="modal-close-btn" onclick="closeModal('auth-modal')" aria-label="Close">×</button>
+      <div class="modal-header">
+        <h3 class="modal-title">Infrasights Account Access</h3>
+        <p class="modal-subtitle">Sign in or register to submit and manage deployment requests.</p>
+        <div id="auth-modal-notice" style="display:none;margin-top:0.5rem;padding:0.5rem;background:rgba(14,165,233,0.12);border:1px solid rgba(56,189,248,0.3);border-radius:4px;font-size:0.8rem;color:#7dd3fc;"></div>
+      </div>
+
+      <div style="display:flex;border-bottom:1px solid var(--border-subtle);background:rgba(0,0,0,0.2);">
+        <button id="tab-btn-login" class="mockup-tab active" style="flex:1;text-align:center;">Sign In</button>
+        <button id="tab-btn-register" class="mockup-tab" style="flex:1;text-align:center;">Create Account</button>
+      </div>
+
+      <div class="modal-body" style="padding: 1.25rem 1.5rem 1.5rem;">
+        <!-- Form: Login -->
+        <form id="form-login">
+          <div class="form-group" style="margin-bottom: 0.85rem;">
+            <label class="form-label" for="login-email">Business Email</label>
+            <input type="email" id="login-email" class="form-input" placeholder="san.admin@company.com" required>
+          </div>
+          <div class="form-group" style="margin-bottom: 0.85rem;">
+            <label class="form-label" for="login-password">Password</label>
+            <input type="password" id="login-password" class="form-input" placeholder="••••••••" required>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;font-size:0.8rem;">
+            <label style="display:flex;align-items:center;gap:0.4rem;color:var(--text-muted);cursor:pointer;">
+              <input type="checkbox" id="login-remember" checked> Remember me
+            </label>
+            <a href="#" id="link-forgot-password" style="color:var(--cyan-400)">Forgot password?</a>
+          </div>
+          <div id="login-error" style="display:none;color:#f87171;font-size:0.85rem;margin-bottom:0.75rem;"></div>
+          <button type="submit" id="login-submit-btn" class="btn btn-primary" style="width:100%;">Sign In & Continue</button>
+        </form>
+
+        <!-- Form: Register -->
+        <form id="form-register" style="display:none;">
+          <div class="form-group" style="margin-bottom: 0.85rem;">
+            <label class="form-label" for="reg-name">Full Name</label>
+            <input type="text" id="reg-name" class="form-input" placeholder="Alex Morgan" required>
+          </div>
+          <div class="form-group" style="margin-bottom: 0.85rem;">
+            <label class="form-label" for="reg-email">Business Email</label>
+            <input type="email" id="reg-email" class="form-input" placeholder="alex@company.com" required>
+          </div>
+          <div class="form-group" style="margin-bottom: 0.85rem;">
+            <label class="form-label" for="reg-phone">Mobile Phone (Optional)</label>
+            <input type="tel" id="reg-phone" class="form-input" placeholder="+91 98765 43210">
+          </div>
+
+          <div class="form-group" style="margin-bottom: 0.85rem;">
+            <label class="form-label" for="reg-org">Organization Name</label>
+            <input type="text" id="reg-org" class="form-input" placeholder="Acme Financial Services" required>
+          </div>
+          <div class="form-group" style="margin-bottom: 0.85rem;">
+            <label class="form-label" for="reg-password">Password</label>
+            <input type="password" id="reg-password" class="form-input" placeholder="Minimum 8 characters" minlength="8" required>
+          </div>
+          <div class="form-group" style="margin-bottom: 0.85rem;">
+            <label class="form-checkbox-label">
+              <input type="checkbox" id="reg-terms" required>
+              <span>I consent to Infrasights <a href="#" onclick="openModal('terms-modal'); return false;" style="color:var(--cyan-400);text-decoration:underline;">terms of service</a> and <a href="#" onclick="openModal('privacy-modal'); return false;" style="color:var(--cyan-400);text-decoration:underline;">enterprise privacy notice</a>.</span>
+            </label>
+          </div>
+          <div id="register-error" style="display:none;color:#f87171;font-size:0.85rem;margin-bottom:0.75rem;"></div>
+          <div id="register-success" style="display:none;color:#34d399;background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.3);border-radius:4px;padding:0.5rem;font-size:0.8rem;margin-bottom:0.75rem;"></div>
+          <button type="submit" id="register-submit-btn" class="btn btn-primary" style="width:100%;margin-top:0.5rem;">Register Account</button>
+        </form>
+
+        <!-- Form: Forgot Password -->
+        <form id="form-forgot" style="display:none;">
+          <div class="form-group">
+            <label class="form-label" for="forgot-email">Account Business Email</label>
+            <input type="email" id="forgot-email" class="form-input" placeholder="san.admin@company.com" required>
+          </div>
+          <div id="forgot-error" style="display:none;color:#f87171;font-size:0.85rem;margin-bottom:0.75rem;"></div>
+          <div id="forgot-message" style="display:none;padding:0.6rem;background:rgba(14,165,233,0.12);border:1px solid rgba(56,189,248,0.3);border-radius:4px;font-size:0.85rem;color:#7dd3fc;margin-bottom:1rem;"></div>
+          <button type="submit" id="forgot-submit-btn" class="btn btn-primary" style="width:100%;">Send Recovery Instructions</button>
+          <div style="text-align:center;margin-top:1rem;font-size:0.85rem;">
+            <a href="#" id="link-back-to-login" style="color:var(--cyan-400)">Back to Sign In</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       MODAL: Authenticated Deployment Request Wizard
+       ======================================================================== -->
+  <div id="deployment-modal" class="modal-backdrop">
+    <div class="modal-dialog" style="max-width: 680px;">
+      <button class="modal-close-btn" onclick="closeModal('deployment-modal')" aria-label="Close">×</button>
+      
+      <div class="modal-header">
+        <h3 class="modal-title">Request an Infrasights v2.10 Deployment</h3>
+        <p class="modal-subtitle">Submit your SAN environment specifications for technical scoping.</p>
+      </div>
+
+      <div class="modal-body">
+        <!-- Stepper Indicators -->
+        <div class="wizard-stepper">
+          <div class="wizard-step active" id="step-ind-1">
+            <span class="wizard-step-circle">1</span>
+            <span>Organization</span>
+          </div>
+          <div class="wizard-step" id="step-ind-2">
+            <span class="wizard-step-circle">2</span>
+            <span>SAN Fabric</span>
+          </div>
+          <div class="wizard-step" id="step-ind-3">
+            <span class="wizard-step-circle">3</span>
+            <span>Deployment</span>
+          </div>
+          <div class="wizard-step" id="step-ind-4">
+            <span class="wizard-step-circle">4</span>
+            <span>Review</span>
+          </div>
+        </div>
+
+        <form id="deployment-wizard-form">
+          <!-- Step 1: Organization Details -->
+          <div class="wizard-step-pane" id="pane-step-1">
+            <div class="form-grid-2">
+              <div class="form-group" style="margin-bottom: 0.75rem;">
+                <label class="form-label" for="dept-org">Organization Name *</label>
+                <input type="text" id="dept-org" class="form-input" required>
+              </div>
+              <div class="form-group" style="margin-bottom: 0.75rem;">
+                <label class="form-label" for="dept-email">Business Email *</label>
+                <input type="email" id="dept-email" class="form-input" required>
+              </div>
+            </div>
+            <div class="form-grid-2">
+              <div class="form-group" style="margin-bottom: 0.75rem;">
+                <label class="form-label" for="dept-country">Country / Region</label>
+                <input type="text" id="dept-country" class="form-input" placeholder="e.g. United States, Germany, Singapore">
+              </div>
+              <div class="form-group" style="margin-bottom: 0.75rem;">
+                <label class="form-label" for="dept-role">Department / Team</label>
+                <input type="text" id="dept-role" class="form-input" placeholder="Storage & SAN Operations">
+              </div>
+            </div>
+            <div class="form-group" style="margin-bottom: 0.75rem;">
+              <label class="form-label" for="dept-phone">Contact Mobile Number</label>
+              <input type="tel" id="dept-phone" class="form-input" placeholder="+91 98765 43210">
+            </div>
+          </div>
+
+          <!-- Step 2: SAN Environment Details -->
+          <div class="wizard-step-pane" id="pane-step-2" style="display:none;">
+            <div class="form-grid-2">
+              <div class="form-group" style="margin-bottom: 0.75rem;">
+                <label class="form-label" for="dept-vendor">Primary SAN Switch Architecture *</label>
+                <select id="dept-vendor" class="form-select">
+                  <option value="Enterprise Core Directors">Enterprise Core Directors</option>
+                  <option value="Modular Edge Fabric Switches">Modular Edge Fabric Switches</option>
+                  <option value="Heterogeneous Multi-Vendor Fabric" selected>Heterogeneous Multi-Vendor Fabric</option>
+                  <option value="Standard Fibre Channel Architecture">Standard Fibre Channel Architecture</option>
+                </select>
+              </div>
+              <div class="form-group" style="margin-bottom: 0.75rem;">
+                <label class="form-label" for="dept-sw-count">Approximate Switch Count *</label>
+                <select id="dept-sw-count" class="form-select">
+                  <option value="1-10 Switches">1 - 10 Switches</option>
+                  <option value="11-30 Switches" selected>11 - 30 Switches</option>
+                  <option value="31-75 Switches">31 - 75 Switches</option>
+                  <option value="75+ Enterprise Directors">75+ Enterprise Directors</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-grid-2">
+              <div class="form-group" style="margin-bottom: 0.75rem;">
+                <label class="form-label" for="dept-fabrics">Fabric Count</label>
+                <select id="dept-fabrics" class="form-select">
+                  <option value="2 (Dual Fabric A/B)" selected>2 (Standard Dual Fabric A/B)</option>
+                  <option value="4+ Multi-Site Fabrics">4+ Multi-Site Fabrics</option>
+                  <option value="1 (Single Fabric)">1 (Single Fabric)</option>
+                </select>
+              </div>
+              <div class="form-group" style="margin-bottom: 0.75rem;">
+                <label class="form-label" for="dept-models">Switch Models (If Known)</label>
+                <input type="text" id="dept-models" class="form-input" placeholder="e.g. Enterprise Core Director, High-Density 32G/64G Switch">
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 0.75rem;">
+              <label class="form-label" for="dept-firmware">Switch Firmware Generations (Optional)</label>
+              <input type="text" id="dept-firmware" class="form-input" placeholder="e.g. Enterprise Switch OS / Firmware v9+">
+            </div>
+          </div>
+
+          <!-- Step 3: Deployment Specifications -->
+          <div class="wizard-step-pane" id="pane-step-3" style="display:none;">
+            <div class="form-grid-2">
+              <div class="form-group" style="margin-bottom: 0.75rem;">
+                <label class="form-label" for="dept-model-pref">Preferred Appliance Model</label>
+                <select id="dept-model-pref" class="form-select">
+                  <option value="On-Premises Virtual Appliance (VMware/KVM)" selected>On-Premises Virtual Appliance (VMware/KVM)</option>
+                  <option value="Bare-Metal Linux Appliance">Bare-Metal Linux Appliance</option>
+                  <option value="Containerized Collector (Docker/Podman)">Containerized Collector (Docker/Podman)</option>
+                </select>
+              </div>
+              <div class="form-group" style="margin-bottom: 0.75rem;">
+                <label class="form-label" for="dept-timeline">Target Timeline</label>
+                <select id="dept-timeline" class="form-select">
+                  <option value="Immediate (Next 30 Days)">Immediate (Next 30 Days)</option>
+                  <option value="1 - 3 Months" selected>1 - 3 Months</option>
+                  <option value="Exploratory / Next Quarter">Exploratory / Next Quarter</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 0.75rem;">
+              <label class="form-label" for="dept-notes">Key Operational Challenges or Objectives</label>
+              <textarea id="dept-notes" class="form-textarea" rows="3" placeholder="e.g. Frequent slow-drain troubleshooting, eliminating intermediary management proxies, monitoring SFP optical health..."></textarea>
+            </div>
+          </div>
+
+          <!-- Step 4: Review Summary -->
+          <div class="wizard-step-pane" id="pane-step-4" style="display:none;">
+            <div style="font-size:0.9rem;margin-bottom:0.75rem;color:var(--text-secondary)">Please review your deployment request details before submitting:</div>
+            <div id="wizard-review-container"></div>
+            <div id="wizard-submit-error" style="display:none;color:#f87171;font-size:0.85rem;margin-top:0.75rem;"></div>
+            <div style="margin-top:0.75rem;font-size:0.75rem;color:var(--text-muted);">
+              Notice: Submission does not commit your organization to a commercial purchase. An Infrasights systems engineer will review technical compatibility and schedule a walkthrough.
+            </div>
+          </div>
+
+          <!-- Step 5: Confirmation -->
+          <div class="wizard-step-pane" id="pane-step-5" style="display:none;">
+            <div class="confirmation-box">
+              <div class="confirmation-icon">✓</div>
+              <h3 style="font-size:1.4rem;font-weight:700;margin-bottom:0.5rem">Your Deployment Request Has Been Submitted</h3>
+              <p style="font-size:0.9rem;color:var(--text-secondary);max-width:440px;margin:0 auto">
+                Thank you for your interest in Infrasights v2.10. Our SAN infrastructure team has received your technical specifications.
+              </p>
+              <div class="confirmation-code" id="confirmation-ref-code"></div>
+              <div id="confirmation-email-pill" style="display:inline-block;margin:0.5rem auto 1rem;padding:0.35rem 0.75rem;background:rgba(52,211,153,0.12);border:1px solid rgba(52,211,153,0.3);border-radius:4px;font-size:0.78rem;color:#6ee7b7;">
+                ✓ Confirmation email dispatched to your business address
+              </div>
+              <p style="font-size:0.8rem;color:var(--text-muted);max-width:400px;margin:0 auto">
+                A technical representative will review your SAN topology parameters and contact you at your business email to plan next steps.
+              </p>
+              <button type="button" class="btn btn-secondary" style="margin-top:1.5rem" onclick="closeModal('deployment-modal')">Close Window</button>
+            </div>
+          </div>
+
+          <!-- Wizard Navigation Buttons -->
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:1.25rem;border-top:1px solid var(--border-subtle);padding-top:0.75rem;">
+            <button type="button" id="wizard-prev-btn" class="btn btn-secondary" style="display:none">← Back</button>
+            <div style="margin-left:auto;">
+              <button type="button" id="wizard-next-btn" class="btn btn-primary">Next Step →</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       MODAL: Privacy Policy Placeholder
+       ======================================================================== -->
+  <div id="privacy-modal" class="modal-backdrop">
+    <div class="modal-dialog">
+      <button class="modal-close-btn" onclick="closeModal('privacy-modal')">×</button>
+      <div class="modal-header">
+        <h3 class="modal-title">Enterprise Privacy Notice</h3>
+      </div>
+      <div class="modal-body" style="font-size:0.85rem;color:var(--text-secondary);line-height:1.6">
+        <p>Infrasights respects your enterprise privacy. Information submitted through this website is used solely to evaluate deployment requirements and communicate with authorized requesters.</p>
+        <p style="margin-top:0.75rem">Infrasights software operates entirely within your private on-premises management network. Direct switch telemetry remains in your internal environment and is not transmitted to external cloud endpoints unless explicitly contracted.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       MODAL: Terms Placeholder
+       ======================================================================== -->
+  <div id="terms-modal" class="modal-backdrop">
+    <div class="modal-dialog">
+      <button class="modal-close-btn" onclick="closeModal('terms-modal')">×</button>
+      <div class="modal-header">
+        <h3 class="modal-title">Terms of Service</h3>
+      </div>
+      <div class="modal-body" style="font-size:0.85rem;color:var(--text-secondary);line-height:1.6">
+        <p>By requesting a deployment or creating an account, you represent that you are an authorized representative of your enterprise organization.</p>
+        <p style="margin-top:0.75rem">Infrasights v2.10 is provided subject to signed evaluation or commercial licensing agreements. Switch data collection is conducted in accordance with manufacturer-recommended read-only security practices.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/canvas.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

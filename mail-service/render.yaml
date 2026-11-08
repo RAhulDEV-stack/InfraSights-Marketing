@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: infrasights-mail-service
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: node index.js
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: NODE_ENV
+        value: production
+      - key: ADMIN_NOTIFICATION_EMAIL
+        value: admin@infrasights.in
+      - key: FROM_EMAIL
+        value: admin@infrasights.in
