@@ -1,7 +1,6 @@
 # ==============================================================================
 # Infrasights (https://infrasights.in) — Authorized Digital Sellers (ads.txt)
 # Google AdSense Authorized Inventory Declaration
-# Replace pub-ADSENSE_PUBLISHER_ID_HERE with your Google AdSense Publisher ID
 # Format: <Field #1>, <Field #2>, <Field #3>, <Field #4>
 # ==============================================================================
-google.com, pub-ADSENSE_PUBLISHER_ID_HERE, DIRECT, f08c47fec0942fa0
+google.com, pub-1509985965270188, DIRECT, f08c47fec0942fa0

@@ -911,7 +911,7 @@ async function runTests() {
     assert(contentType.includes('text/plain'), `Expected text/plain content-type, got ${contentType}`);
     assert(typeof res.body === 'string', 'Body must be text string');
     assert(res.body.includes('google.com'), 'Must declare google.com digital seller exchange');
-    assert(res.body.includes('pub-ADSENSE_PUBLISHER_ID_HERE'), 'Must declare Google AdSense publisher ID');
+    assert(res.body.includes('pub-1509985965270188') || res.body.includes('pub-ADSENSE_PUBLISHER_ID_HERE'), 'Must declare Google AdSense publisher ID');
     assert(res.body.includes('DIRECT'), 'Must declare direct relationship');
     assert(res.body.includes('f08c47fec0942fa0'), 'Must include Google AdSense certification authority ID f08c47fec0942fa0');
     const robotsHeader = res.headers.get('x-robots-tag') || '';
