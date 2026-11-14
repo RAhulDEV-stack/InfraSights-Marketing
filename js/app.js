@@ -39,16 +39,16 @@ const AppState = {
 // Architecture Pipeline Details
 const ArchitectureData = {
   switches: {
-    title: '1. SAN Switches (Direct Data Origin)',
-    text: 'Infrasights communicates directly with enterprise Fibre Channel director and edge switches. Telemetry is collected directly from switch control planes via native REST APIs, SNMPv3, and secure SSH polling without requiring intermediate management proxies or external element managers.'
+    title: '1. SAN Switches (Cisco, Brocade & SNMP Forwarding Switches)',
+    text: 'Infrasights connects directly to enterprise Fibre Channel director and fabric switches, including Cisco MDS series, Brocade (Broadcom) fabrics, and any SAN switches supporting SNMP trap forwarding. Telemetry and state-change traps (SW-MIB, FA-MIB, MAPS) are ingested directly without proprietary intermediaries.'
   },
   collection: {
-    title: '2. Infrasights Collection Layer',
+    title: '2. SNMP Forwarding & Telemetry Ingestion Layer',
     text: 'A high-throughput, asynchronous polling collector deployed as a lightweight appliance within your data center network. It queries switch telemetry in parallel, gathering SFP digital optical metrics (DOM), buffer-to-buffer credit counters, port frame states, and error registers with sub-second resolution.'
   },
   processing: {
-    title: '3. Processing & Telemetry Normalization',
-    text: 'Hardware registers and counters from multi-vendor switches are parsed, timestamped, and normalized into a unified Fibre Channel telemetry schema. Calculates delta rates, CRC error frequency, and zero-credit transition rates deterministically without black-box models.'
+    title: '3. App-Wise Correlation & Normalization Engine',
+    text: 'Hardware registers and counters from multi-vendor switches are parsed, timestamped, and correlated directly to business applications, server clusters, and host server SAN paths. Calculates delta rates, CRC error frequency, and link state transitions without black-box models.'
   },
   database: {
     title: '4. Infrasights Time-Series Storage',
@@ -59,11 +59,11 @@ const ArchitectureData = {
     text: 'Secure gRPC and RESTful internal APIs providing access control, role-based authorization, and real-time streaming of fabric status, switch inventory, and threshold-based congestion events to the interface.'
   },
   ui: {
-    title: '6. Infrasights Operations Interface (v2.10)',
-    text: 'A single, high-contrast operational dashboard engineered specifically for storage and SAN operations teams. Delivers clear fabric health overviews, port-level SFP diagnostics, and end-to-end topology maps in real time.'
+    title: '6. App-Wise Operations Interface (v2.10)',
+    text: 'A single, high-contrast operational dashboard engineered specifically for storage and SAN operations teams. Delivers multi-level pie chart topologies mapping applications, server clusters, and individual SAN paths with dynamic red slice failure indication.'
   },
   team: {
-    title: '7. Infrastructure Operations Team',
+    title: '7. Data Center & Storage Operations',
     text: 'Enables SAN engineers, storage administrators, and operations leaders to immediately pinpoint slow-drain devices, bad cables, and degraded transceivers before they impact business-critical LUNs.'
   }
 };
@@ -75,6 +75,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   setupDeploymentWizard();
   setupArchitectureInspector();
   setupDashboardTabs();
+  setupAppWiseDashboard();
   setupFaqAccordion();
   setupModalDismissals();
   await loadStoredSession();
@@ -1086,4 +1087,896 @@ function escapeHtml(str) {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;');
+}
+
+// ==========================================================================
+// App-Wise SAN Path Interactive Operational Dashboard Engine
+// Real-time drill-down: App (Home) -> Server Clusters -> Hostname -> SAN Paths
+// Switch Compatibility: Cisco MDS, Brocade (Broadcom), Universal SNMP Forwarding
+// ==========================================================================
+
+const AppWiseData = {
+  apps: [
+    {
+      id: 'cbs',
+      name: 'Core Banking Engine (CBS)',
+      short: 'HDFC-CBS-PROD',
+      switches: 'Cisco MDS 9710 & Brocade X7',
+      clusters: [
+        {
+          id: 'cbs-cl-1',
+          name: 'CBS Core Transaction Cluster',
+          hosts: [
+            {
+              id: 'srv-cbs-app01',
+              name: 'srv-cbs-app01.dc1.prod',
+              ip: '10.140.24.81',
+              paths: [
+                { id: 'p1', name: 'Slot 2 / Port 8', sw: 'Core-MDS-9710-1A', fabric: 'Fabric A', speed: '32G FC', state: 'online' },
+                { id: 'p2', name: 'Slot 2 / Port 9', sw: 'Core-MDS-9710-1A', fabric: 'Fabric A', speed: '32G FC', state: 'online' },
+                { id: 'p3', name: 'Slot 4 / Port 11', sw: 'Core-Brocade-X7-1B', fabric: 'Fabric B', speed: '32G FC', state: 'online' },
+                { id: 'p4', name: 'Slot 4 / Port 12', sw: 'Core-Brocade-X7-1B', fabric: 'Fabric B', speed: '32G FC', state: 'online' }
+              ]
+            },
+            {
+              id: 'srv-cbs-app02',
+              name: 'srv-cbs-app02.dc1.prod',
+              ip: '10.140.24.82',
+              paths: [
+                { id: 'p5', name: 'Slot 2 / Port 10', sw: 'Core-MDS-9710-1A', fabric: 'Fabric A', speed: '32G FC', state: 'online' },
+                { id: 'p6', name: 'Slot 4 / Port 14', sw: 'Core-Brocade-X7-1B', fabric: 'Fabric B', speed: '32G FC', state: 'online' }
+              ]
+            }
+          ]
+        },
+        {
+          id: 'cbs-cl-2',
+          name: 'CBS DB Failover Cluster',
+          hosts: [
+            {
+              id: 'srv-cbs-db01',
+              name: 'srv-cbs-db01.dc1.prod',
+              ip: '10.140.24.101',
+              paths: [
+                { id: 'p7', name: 'Slot 2 / Port 8', sw: 'Core-MDS-9710-1A', fabric: 'Fabric A', speed: '32G FC', state: 'online' },
+                { id: 'p8', name: 'Slot 2 / Port 9', sw: 'Core-MDS-9710-1A', fabric: 'Fabric A', speed: '32G FC', state: 'online' },
+                { id: 'p9', name: 'Slot 4 / Port 11', sw: 'Core-Brocade-X7-1B', fabric: 'Fabric B', speed: '32G FC', state: 'online' },
+                { id: 'p10', name: 'Slot 4 / Port 12', sw: 'Core-Brocade-X7-1B', fabric: 'Fabric B', speed: '32G FC', isTargetDownPort: true, state: 'online' }
+              ]
+            },
+            {
+              id: 'srv-cbs-db02',
+              name: 'srv-cbs-db02.dc1.prod',
+              ip: '10.140.24.102',
+              paths: [
+                { id: 'p11', name: 'Slot 2 / Port 12', sw: 'Core-MDS-9710-1A', fabric: 'Fabric A', speed: '32G FC', state: 'online' },
+                { id: 'p12', name: 'Slot 4 / Port 16', sw: 'Core-Brocade-X7-1B', fabric: 'Fabric B', speed: '32G FC', state: 'online' }
+              ]
+            }
+          ]
+        },
+        {
+          id: 'cbs-cl-3',
+          name: 'CBS Reporting & Analytics Cluster',
+          hosts: [
+            {
+              id: 'srv-cbs-rpt01',
+              name: 'srv-cbs-rpt01.dc1.prod',
+              ip: '10.140.24.115',
+              paths: [
+                { id: 'p13', name: 'Slot 3 / Port 4', sw: 'Core-MDS-9710-1A', fabric: 'Fabric A', speed: '32G FC', state: 'online' },
+                { id: 'p14', name: 'Slot 5 / Port 2', sw: 'Core-Brocade-X7-1B', fabric: 'Fabric B', speed: '32G FC', state: 'online' }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      id: 'pg',
+      name: 'Payment Gateway Switch',
+      short: 'PG-UPI-SETTLE',
+      switches: 'Brocade G620 Fabrics',
+      clusters: [
+        {
+          id: 'pg-cl-1',
+          name: 'Payment Routing Cluster',
+          hosts: [
+            {
+              id: 'srv-pg-rt01',
+              name: 'srv-pg-rt01.dc1.prod',
+              ip: '10.140.30.21',
+              paths: [
+                { id: 'p15', name: 'Slot 1 / Port 1', sw: 'Edge-Brocade-G620-1A', fabric: 'Fabric A', speed: '32G FC', state: 'online' },
+                { id: 'p16', name: 'Slot 1 / Port 2', sw: 'Edge-Brocade-G620-1B', fabric: 'Fabric B', speed: '32G FC', state: 'online' }
+              ]
+            }
+          ]
+        },
+        {
+          id: 'pg-cl-2',
+          name: 'Settlement & Ledger Cluster',
+          hosts: [
+            {
+              id: 'srv-pg-st01',
+              name: 'srv-pg-st01.dc1.prod',
+              ip: '10.140.30.35',
+              paths: [
+                { id: 'p17', name: 'Slot 1 / Port 5', sw: 'Edge-Brocade-G620-1A', fabric: 'Fabric A', speed: '32G FC', state: 'online' },
+                { id: 'p18', name: 'Slot 1 / Port 6', sw: 'Edge-Brocade-G620-1B', fabric: 'Fabric B', speed: '32G FC', state: 'online' }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      id: 'fx',
+      name: 'Treasury & FX Trading',
+      short: 'TREASURY-FX',
+      switches: 'Cisco MDS 9396T',
+      clusters: [
+        {
+          id: 'fx-cl-1',
+          name: 'FX Low-Latency Matching Engine',
+          hosts: [
+            {
+              id: 'srv-fx-node01',
+              name: 'srv-fx-node01.dc1.prod',
+              ip: '10.140.40.10',
+              paths: [
+                { id: 'p19', name: 'Slot 1 / Port 12', sw: 'Edge-MDS-9396T-2A', fabric: 'Fabric A', speed: '32G FC', state: 'online' },
+                { id: 'p20', name: 'Slot 1 / Port 13', sw: 'Edge-MDS-9396T-2B', fabric: 'Fabric B', speed: '32G FC', state: 'online' }
+              ]
+            }
+          ]
+        },
+        {
+          id: 'fx-cl-2',
+          name: 'Real-Time Risk Calculation',
+          hosts: [
+            {
+              id: 'srv-fx-risk01',
+              name: 'srv-fx-risk01.dc1.prod',
+              ip: '10.140.40.22',
+              paths: [
+                { id: 'p21', name: 'Slot 1 / Port 18', sw: 'Edge-MDS-9396T-2A', fabric: 'Fabric A', speed: '32G FC', state: 'online' },
+                { id: 'p22', name: 'Slot 1 / Port 19', sw: 'Edge-MDS-9396T-2B', fabric: 'Fabric B', speed: '32G FC', state: 'online' }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      id: 'lake',
+      name: 'Enterprise Analytics & Lake',
+      short: 'DATA-LAKE-EXP',
+      switches: 'Multi-Vendor SNMP Gateway',
+      clusters: [
+        {
+          id: 'lake-cl-1',
+          name: 'Spark Distributed Analytics',
+          hosts: [
+            {
+              id: 'srv-lake-wrk01',
+              name: 'srv-lake-wrk01.dc1.prod',
+              ip: '10.140.50.11',
+              paths: [
+                { id: 'p23', name: 'Slot 3 / Port 1', sw: 'MultiVendor-SAN-Core1', fabric: 'Fabric A', speed: '32G FC', state: 'online' },
+                { id: 'p24', name: 'Slot 3 / Port 2', sw: 'MultiVendor-SAN-Core2', fabric: 'Fabric B', speed: '32G FC', state: 'online' }
+              ]
+            }
+          ]
+        },
+        {
+          id: 'lake-cl-2',
+          name: 'In-Memory OLAP Query Engine',
+          hosts: [
+            {
+              id: 'srv-lake-olap01',
+              name: 'srv-lake-olap01.dc1.prod',
+              ip: '10.140.50.31',
+              paths: [
+                { id: 'p25', name: 'Slot 3 / Port 5', sw: 'MultiVendor-SAN-Core1', fabric: 'Fabric A', speed: '32G FC', state: 'online' },
+                { id: 'p26', name: 'Slot 3 / Port 6', sw: 'MultiVendor-SAN-Core2', fabric: 'Fabric B', speed: '32G FC', state: 'online' }
+              ]
+            }
+          ]
+        },
+        {
+          id: 'lake-cl-3',
+          name: 'High-Throughput Ingestion Nodes',
+          hosts: [
+            {
+              id: 'srv-lake-ing01',
+              name: 'srv-lake-ing01.dc1.prod',
+              ip: '10.140.50.51',
+              paths: [
+                { id: 'p27', name: 'Slot 3 / Port 9', sw: 'MultiVendor-SAN-Core1', fabric: 'Fabric A', speed: '32G FC', state: 'online' },
+                { id: 'p28', name: 'Slot 3 / Port 10', sw: 'MultiVendor-SAN-Core2', fabric: 'Fabric B', speed: '32G FC', state: 'online' }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+};
+
+function setupAppWiseDashboard() {
+  const dashboard = document.getElementById('appwise-dashboard');
+  if (!dashboard) return;
+
+  let activeView = 'home'; // 'home' | 'cluster' | 'host'
+  let currentAppId = 'cbs';
+  let currentClusterId = 'cbs-cl-2';
+  let currentHostId = 'srv-cbs-db01';
+  let isPortDownSimulated = false;
+
+  const tooltipEl = document.getElementById('appwise-slice-tooltip');
+
+  // Breadcrumb elements
+  const crumbHome = document.getElementById('crumb-home');
+  const crumbApp = document.getElementById('crumb-app');
+  const crumbHost = document.getElementById('crumb-host');
+  const crumbSep1 = document.getElementById('crumb-sep-1');
+  const crumbSep2 = document.getElementById('crumb-sep-2');
+
+  // Simulation controls
+  const btnSimulateDown = document.getElementById('btn-simulate-down');
+  const btnSimText = document.getElementById('btn-sim-text');
+  const btnResetNominal = document.getElementById('btn-reset-nominal');
+
+  // View containers
+  const viewHome = document.getElementById('appwise-view-home');
+  const viewCluster = document.getElementById('appwise-view-cluster');
+  const viewHost = document.getElementById('appwise-view-host');
+
+  // Helper: draw donut pie chart
+  function drawDonut(canvas, slices, options = {}) {
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const dpr = window.devicePixelRatio || 1;
+    const size = options.size || (canvas.clientWidth || 90);
+    canvas.width = size * dpr;
+    canvas.height = size * dpr;
+    ctx.scale(dpr, dpr);
+
+    const cx = size / 2;
+    const cy = size / 2;
+    const OR = (size / 2) - 4;
+    const IR = OR * (options.innerRatio || 0.52);
+    const total = slices.length;
+
+    ctx.clearRect(0, 0, size, size);
+
+    if (total === 0) {
+      ctx.beginPath();
+      ctx.arc(cx, cy, OR, 0, Math.PI * 2);
+      ctx.fillStyle = '#111a2e';
+      ctx.fill();
+      return;
+    }
+
+    const gap = total > 1 ? (options.gap || 0.06) : 0;
+    const sliceAngle = (Math.PI * 2 - (total * gap)) / total;
+    let currentAngle = -Math.PI / 2;
+
+    const angleMap = [];
+
+    slices.forEach((slice, idx) => {
+      const isHovered = (options.hoverIdx === idx);
+      const startAngle = currentAngle + gap / 2;
+      const endAngle = currentAngle + sliceAngle + gap / 2;
+      const midAngle = (startAngle + endAngle) / 2;
+
+      angleMap.push({ start: startAngle, end: endAngle, mid: midAngle, slice });
+
+      const popOut = isHovered ? (options.popOut || 5) : 0;
+      const dx = popOut ? Math.cos(midAngle) * popOut : 0;
+      const dy = popOut ? Math.sin(midAngle) * popOut : 0;
+
+      let fillColor = '#34d399'; // Online / Healthy
+      if (slice.status === 'offline') fillColor = '#ef4444'; // Red / Critical
+      else if (slice.status === 'warning') fillColor = '#fbbf24'; // Amber / Warning
+
+      ctx.save();
+      if (isHovered || slice.status === 'offline') {
+        ctx.shadowColor = slice.status === 'offline' ? 'rgba(239, 68, 68, 0.8)' : 'rgba(0, 242, 254, 0.6)';
+        ctx.shadowBlur = slice.status === 'offline' ? 14 : 10;
+      }
+
+      ctx.beginPath();
+      ctx.arc(cx + dx, cy + dy, OR, startAngle, endAngle);
+      ctx.arc(cx + dx, cy + dy, IR, endAngle, startAngle, true);
+      ctx.closePath();
+      ctx.fillStyle = fillColor;
+      ctx.fill();
+      ctx.restore();
+
+      // Border stroke
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(cx + dx, cy + dy, OR, startAngle, endAngle);
+      ctx.arc(cx + dx, cy + dy, IR, endAngle, startAngle, true);
+      ctx.closePath();
+      ctx.strokeStyle = '#080d1a';
+      ctx.lineWidth = 1.2;
+      ctx.stroke();
+      ctx.restore();
+
+      currentAngle += sliceAngle + gap;
+    });
+
+    // Donut hole
+    ctx.beginPath();
+    ctx.arc(cx, cy, IR - 0.5, 0, Math.PI * 2);
+    ctx.fillStyle = '#0d1527';
+    ctx.fill();
+
+    // Center number
+    if (options.centerText !== false) {
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillStyle = options.centerColor || '#ffffff';
+      ctx.font = `700 ${options.centerFontSize || Math.round(IR * 0.75)}px 'JetBrains Mono', monospace`;
+      ctx.fillText(String(options.centerText !== undefined ? options.centerText : total), cx, cy);
+    }
+
+    canvas.__angleMap = angleMap;
+    canvas.__cx = cx;
+    canvas.__cy = cy;
+    canvas.__IR = IR;
+    canvas.__OR = OR;
+  }
+
+  // Bind mouse interaction to a canvas
+  function bindCanvasHover(canvas, onHoverChange) {
+    if (!canvas || canvas.__hasHoverBound) return;
+    canvas.__hasHoverBound = true;
+
+    canvas.addEventListener('mousemove', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const cx = canvas.__cx || (rect.width / 2);
+      const cy = canvas.__cy || (rect.height / 2);
+      const dx = x - cx;
+      const dy = y - cy;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+
+      const IR = canvas.__IR || 20;
+      const OR = canvas.__OR || 45;
+
+      let hoveredIdx = -1;
+      let hoveredSlice = null;
+
+      if (dist >= IR - 2 && dist <= OR + 8 && canvas.__angleMap) {
+        let angle = Math.atan2(dy, dx);
+        if (angle < -Math.PI / 2) angle += Math.PI * 2;
+
+        for (let i = 0; i < canvas.__angleMap.length; i++) {
+          const item = canvas.__angleMap[i];
+          if (angle >= item.start && angle <= item.end) {
+            hoveredIdx = i;
+            hoveredSlice = item.slice;
+            break;
+          }
+        }
+      }
+
+      onHoverChange(hoveredIdx, hoveredSlice, e.clientX, e.clientY);
+    });
+
+    canvas.addEventListener('mouseleave', () => {
+      onHoverChange(-1, null, 0, 0);
+    });
+  }
+
+  function showTooltip(slice, x, y) {
+    if (!tooltipEl || !slice) return;
+    let html = `<div style="font-weight:700;color:var(--cyan-400);margin-bottom:2px;">${escapeHtml(slice.label || '')}</div>`;
+    if (slice.sublabel) html += `<div style="color:#94a3b8;font-size:0.65rem;">${escapeHtml(slice.sublabel)}</div>`;
+    const statusColor = slice.status === 'offline' ? '#ef4444' : (slice.status === 'warning' ? '#fbbf24' : '#34d399');
+    const statusText = slice.status === 'offline' ? 'OFFLINE (Slot X Port Y Down)' : (slice.status === 'warning' ? 'WARNING (MAPS Rule Alert)' : 'ONLINE (Nominal)');
+    html += `<div style="color:${statusColor};font-weight:600;margin-top:4px;font-size:0.65rem;">● ${statusText}</div>`;
+
+    tooltipEl.innerHTML = html;
+    tooltipEl.style.display = 'block';
+
+    const ttWidth = 200;
+    const ttHeight = 70;
+    let left = x + 12;
+    let top = y - 10;
+    if (left + ttWidth > window.innerWidth - 10) left = x - ttWidth - 10;
+    if (top + ttHeight > window.innerHeight - 10) top = y - ttHeight;
+
+    tooltipEl.style.left = `${left}px`;
+    tooltipEl.style.top = `${top}px`;
+  }
+
+  function hideTooltip() {
+    if (tooltipEl) tooltipEl.style.display = 'none';
+  }
+
+  // Render Level 1: Home View (App Cards with Server Cluster Slices)
+  function renderHomeView() {
+    const grid = document.getElementById('appwise-home-grid');
+    if (!grid) return;
+
+    grid.innerHTML = '';
+
+    AppWiseData.apps.forEach(app => {
+      const card = document.createElement('div');
+      card.className = 'appwise-app-card';
+      card.setAttribute('data-app-id', app.id);
+
+      let hasOffline = false;
+      if (app.id === 'cbs' && isPortDownSimulated) hasOffline = true;
+
+      if (hasOffline) card.classList.add('status-crit');
+
+      const slices = app.clusters.map(cluster => {
+        let status = 'online';
+        if (cluster.id === 'cbs-cl-2' && isPortDownSimulated) status = 'offline';
+        return {
+          id: cluster.id,
+          label: cluster.name,
+          sublabel: `${cluster.hosts.length} Hosts · Dual Fabric`,
+          status
+        };
+      });
+
+      const totalHosts = app.clusters.reduce((acc, c) => acc + c.hosts.length, 0);
+      const totalPaths = app.clusters.reduce((acc, c) => acc + c.hosts.reduce((hacc, h) => hacc + h.paths.length, 0), 0);
+
+      const statusHtml = hasOffline
+        ? `<span style="color:#ef4444;font-weight:700;">Degraded (Slot 4 Port 12 Down)</span>`
+        : `<span style="color:#34d399;font-weight:600;">Nominal (100% Redundant)</span>`;
+
+      card.innerHTML = `
+        <div class="appwise-card-top">
+          <span class="appwise-card-title">${escapeHtml(app.name)}</span>
+          <span class="appwise-card-short">${escapeHtml(app.short)}</span>
+        </div>
+        <div class="appwise-card-body">
+          <div class="appwise-pie-wrap">
+            <canvas class="appwise-pie-canvas" id="cpie-${app.id}" width="90" height="90"></canvas>
+          </div>
+          <div class="appwise-card-stats">
+            <div class="appwise-stat-row">
+              <span class="appwise-stat-label">Slices (Clusters):</span>
+              <span class="appwise-stat-val">${slices.length} Server Clusters</span>
+            </div>
+            <div class="appwise-stat-row">
+              <span class="appwise-stat-label">Host Servers:</span>
+              <span class="appwise-stat-val">${totalHosts} Physical Nodes</span>
+            </div>
+            <div class="appwise-stat-row">
+              <span class="appwise-stat-label">SAN Paths:</span>
+              <span class="appwise-stat-val">${totalPaths} Paths (Fab A/B)</span>
+            </div>
+            <div class="appwise-stat-row">
+              <span class="appwise-stat-label">Status:</span>
+              <span class="appwise-stat-val">${statusHtml}</span>
+            </div>
+          </div>
+        </div>
+        <div class="appwise-card-footer">
+          <span style="font-family:var(--font-mono);font-size:0.65rem;color:var(--text-muted);">${escapeHtml(app.switches)}</span>
+          <span class="appwise-click-hint">Drill into clusters ›</span>
+        </div>
+      `;
+
+      grid.appendChild(card);
+
+      const cv = card.querySelector(`#cpie-${app.id}`);
+      if (cv) {
+        drawDonut(cv, slices, {
+          size: 90,
+          innerRatio: 0.52,
+          centerText: slices.length,
+          centerColor: hasOffline ? '#ef4444' : '#ffffff'
+        });
+
+        bindCanvasHover(cv, (hoverIdx, slice, x, y) => {
+          drawDonut(cv, slices, {
+            size: 90,
+            innerRatio: 0.52,
+            hoverIdx,
+            centerText: slices.length,
+            centerColor: hasOffline ? '#ef4444' : '#ffffff'
+          });
+          if (hoverIdx >= 0 && slice) showTooltip(slice, x, y);
+          else hideTooltip();
+        });
+      }
+
+      card.addEventListener('click', (e) => {
+        e.stopPropagation();
+        currentAppId = app.id;
+        navigateTo('cluster');
+      });
+    });
+  }
+
+  // Render Level 2: Cluster View (App Detail with Server Clusters)
+  function renderClusterView() {
+    const app = AppWiseData.apps.find(a => a.id === currentAppId) || AppWiseData.apps[0];
+    const container = document.getElementById('cluster-cards-container');
+    const titleEl = document.getElementById('cluster-view-app-title');
+    const badgeEl = document.getElementById('cluster-view-app-badge');
+
+    if (titleEl) titleEl.innerText = app.name;
+    if (badgeEl) badgeEl.innerText = `${app.short} · ${app.clusters.length} Server Clusters`;
+
+    if (!container) return;
+    container.innerHTML = '';
+
+    app.clusters.forEach(cluster => {
+      const card = document.createElement('div');
+      card.className = 'appwise-cluster-card';
+
+      let isClusterDown = false;
+      if (cluster.id === 'cbs-cl-2' && isPortDownSimulated) isClusterDown = true;
+
+      if (isClusterDown) card.classList.add('status-crit');
+
+      const slices = cluster.hosts.map(host => {
+        let status = 'online';
+        if (host.id === 'srv-cbs-db01' && isPortDownSimulated) status = 'offline';
+        return {
+          id: host.id,
+          label: host.name,
+          sublabel: `IP: ${host.ip} · ${host.paths.length} SAN Paths`,
+          status
+        };
+      });
+
+      const totalClusterPaths = cluster.hosts.reduce((acc, h) => acc + h.paths.length, 0);
+
+      const statusBadge = isClusterDown
+        ? `<span class="status-badge critical">1 SAN PATH OFFLINE</span>`
+        : `<span class="status-badge healthy">ALL PATHS HEALTHY</span>`;
+
+      const hostPillsHtml = cluster.hosts.map(h => {
+        const isHDown = (h.id === 'srv-cbs-db01' && isPortDownSimulated);
+        return `<span class="appwise-host-chip" style="${isHDown ? 'color:#f87171;border-color:rgba(239,68,68,0.5);' : ''}">${escapeHtml(h.name)}</span>`;
+      }).join(' ');
+
+      card.innerHTML = `
+        <div class="appwise-card-top">
+          <span class="appwise-card-title">${escapeHtml(cluster.name)}</span>
+          ${statusBadge}
+        </div>
+        <div class="appwise-card-body">
+          <div class="appwise-pie-wrap">
+            <canvas class="appwise-pie-canvas" id="clpie-${cluster.id}" width="90" height="90"></canvas>
+          </div>
+          <div class="appwise-card-stats">
+            <div class="appwise-stat-row">
+              <span class="appwise-stat-label">Physical Hosts:</span>
+              <span class="appwise-stat-val">${cluster.hosts.length} Server Nodes</span>
+            </div>
+            <div class="appwise-stat-row">
+              <span class="appwise-stat-label">Fabric Distribution:</span>
+              <span class="appwise-stat-val">Dual Fabric (A / B)</span>
+            </div>
+            <div class="appwise-stat-row">
+              <span class="appwise-stat-label">Total SAN Paths:</span>
+              <span class="appwise-stat-val">${totalClusterPaths} Active Links</span>
+            </div>
+            <div class="appwise-cluster-hosts">
+              ${hostPillsHtml}
+            </div>
+          </div>
+        </div>
+        <div class="appwise-card-footer">
+          <span style="font-family:var(--font-mono);font-size:0.65rem;color:var(--text-muted);">${cluster.hosts.length} Hostnodes</span>
+          <span class="appwise-click-hint">Inspect host SAN paths ›</span>
+        </div>
+      `;
+
+      container.appendChild(card);
+
+      const cv = card.querySelector(`#clpie-${cluster.id}`);
+      if (cv) {
+        drawDonut(cv, slices, {
+          size: 90,
+          innerRatio: 0.52,
+          centerText: slices.length,
+          centerColor: isClusterDown ? '#ef4444' : '#ffffff'
+        });
+
+        bindCanvasHover(cv, (hoverIdx, slice, x, y) => {
+          drawDonut(cv, slices, {
+            size: 90,
+            innerRatio: 0.52,
+            hoverIdx,
+            centerText: slices.length,
+            centerColor: isClusterDown ? '#ef4444' : '#ffffff'
+          });
+          if (hoverIdx >= 0 && slice) showTooltip(slice, x, y);
+          else hideTooltip();
+        });
+      }
+
+      card.addEventListener('click', (e) => {
+        e.stopPropagation();
+        currentClusterId = cluster.id;
+        currentHostId = cluster.hosts[0]?.id || 'srv-cbs-db01';
+        navigateTo('host');
+      });
+    });
+  }
+
+  // Render Level 3: Hostname View (Every Slice Indicates a SAN Path)
+  function renderHostView() {
+    const app = AppWiseData.apps.find(a => a.id === currentAppId) || AppWiseData.apps[0];
+    let cluster = app.clusters.find(c => c.id === currentClusterId) || app.clusters[0];
+    let host = cluster.hosts.find(h => h.id === currentHostId) || cluster.hosts[0];
+
+    const hostNameEl = document.getElementById('host-view-hostname');
+    const hostIpEl = document.getElementById('host-view-ip');
+    if (hostNameEl) hostNameEl.innerText = host.name;
+    if (hostIpEl) hostIpEl.innerText = `IP: ${host.ip} · Dual HBA QLogic 32G`;
+
+    // Render Host Selection Pills
+    const selectorEl = document.getElementById('host-view-selector');
+    if (selectorEl) {
+      selectorEl.innerHTML = `
+        <span style="font-size:0.75rem;font-weight:600;color:var(--text-muted);margin-right:0.4rem;">Select Hostname:</span>
+        ${cluster.hosts.map(h => {
+          const isHDown = (h.id === 'srv-cbs-db01' && isPortDownSimulated);
+          const isHActive = (h.id === host.id);
+          return `
+            <button class="appwise-host-pill ${isHActive ? 'active' : ''} ${isHDown ? 'has-down' : ''}" data-host-id="${h.id}">
+              <span class="appwise-path-dot ${isHDown ? 'down' : 'online'}"></span>
+              <span>${escapeHtml(h.name)}</span>
+              <span style="font-size:0.65rem;opacity:0.8;">(${h.paths.length} SAN Paths)</span>
+            </button>
+          `;
+        }).join('')}
+      `;
+      selectorEl.querySelectorAll('.appwise-host-pill').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const targetHostId = btn.getAttribute('data-host-id');
+          if (targetHostId) {
+            currentHostId = targetHostId;
+            renderHostView();
+          }
+        });
+      });
+    }
+
+    const slices = host.paths.map(path => {
+      let status = 'online';
+      if (path.isTargetDownPort && isPortDownSimulated) {
+        status = 'offline';
+      }
+      return {
+        id: path.id,
+        label: `${path.fabric} · ${path.sw}`,
+        sublabel: `${path.name} (${path.speed})`,
+        status,
+        path
+      };
+    });
+
+    const isHostDown = slices.some(s => s.status === 'offline');
+    const onlineCount = slices.filter(s => s.status === 'online').length;
+    const totalCount = slices.length;
+
+    const cv = document.getElementById('canvas-host-large-pie');
+    const centerNum = document.getElementById('host-pie-center-num');
+    const centerStatus = document.getElementById('host-pie-center-status');
+
+    if (centerNum) centerNum.innerText = `${onlineCount}/${totalCount}`;
+    if (centerStatus) {
+      if (isHostDown) {
+        centerStatus.innerText = '1 PATH DOWN';
+        centerStatus.className = 'appwise-host-center-status down';
+      } else {
+        centerStatus.innerText = `${totalCount}/${totalCount} HEALTHY`;
+        centerStatus.className = 'appwise-host-center-status nominal';
+      }
+    }
+
+    if (cv) {
+      drawDonut(cv, slices, {
+        size: 220,
+        innerRatio: 0.60,
+        gap: 0.08,
+        popOut: 8,
+        centerText: false
+      });
+
+      bindCanvasHover(cv, (hoverIdx, slice, x, y) => {
+        drawDonut(cv, slices, {
+          size: 220,
+          innerRatio: 0.60,
+          gap: 0.08,
+          popOut: 8,
+          hoverIdx,
+          centerText: false
+        });
+        if (hoverIdx >= 0 && slice) showTooltip(slice, x, y);
+        else hideTooltip();
+      });
+    }
+
+    // Render Fabric A Paths
+    const fabACard = document.getElementById('fabric-a-card');
+    const fabABadge = document.getElementById('fabric-a-badge');
+    const fabAPaths = document.getElementById('fabric-a-paths');
+    const fabPathsA = host.paths.filter(p => p.fabric === 'Fabric A');
+
+    if (fabAPaths) {
+      fabAPaths.innerHTML = fabPathsA.map((p, idx) => `
+        <div class="appwise-path-item" id="fabric-a-path-${idx+1}">
+          <div>
+            <span class="appwise-path-dot online"></span>
+            <span class="appwise-path-name">${escapeHtml(p.name)}</span>
+          </div>
+          <span style="font-family: var(--font-mono); font-size: 0.7rem; color: #34d399;">${escapeHtml(p.speed)}</span>
+        </div>
+      `).join('');
+    }
+
+    // Render Fabric B Paths
+    const fabBCard = document.getElementById('fabric-b-card');
+    const fabBBadge = document.getElementById('fabric-b-badge');
+    const fabBPaths = document.getElementById('fabric-b-paths');
+    const fabPathsB = host.paths.filter(p => p.fabric === 'Fabric B');
+
+    if (fabBCard && fabBBadge) {
+      if (isHostDown) {
+        fabBCard.classList.add('has-down');
+        fabBBadge.className = 'status-badge critical';
+        fabBBadge.innerText = 'Degraded (Slot 4 Port 12 Down)';
+      } else {
+        fabBCard.classList.remove('has-down');
+        fabBBadge.className = 'status-badge healthy';
+        fabBBadge.innerText = 'Nominal';
+      }
+    }
+
+    if (fabBPaths) {
+      fabBPaths.innerHTML = fabPathsB.map((p, idx) => {
+        const isPathDown = (p.isTargetDownPort && isPortDownSimulated);
+        const isP4 = (host.id === 'srv-cbs-db01' && p.isTargetDownPort);
+        return `
+          <div class="appwise-path-item ${isPathDown ? 'down' : ''}" ${isP4 ? 'id="host-path-item-4"' : ''}>
+            <div>
+              <span class="appwise-path-dot ${isPathDown ? 'down' : 'online'}" ${isP4 ? 'id="path-4-dot"' : ''}></span>
+              <span class="appwise-path-name" ${isP4 ? 'id="path-4-name"' : ''}>${escapeHtml(p.name)}${isPathDown ? ' (OFFLINE)' : ''}</span>
+            </div>
+            <span style="font-family: var(--font-mono); font-size: 0.7rem; color: ${isPathDown ? '#ef4444' : '#34d399'};" ${isP4 ? 'id="path-4-speed"' : ''}>
+              ${isPathDown ? 'LINK DOWN' : escapeHtml(p.speed)}
+            </span>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Update Recent Alerts Table
+    const alertTbody = document.getElementById('host-alerts-tbody');
+    const alertBox = document.getElementById('host-alerts-box');
+    if (alertTbody) {
+      if (isHostDown) {
+        if (alertBox) alertBox.classList.add('has-crit');
+        alertTbody.innerHTML = `
+          <tr style="background: rgba(239, 68, 68, 0.08);">
+            <td style="color: #fca5a5; font-weight: 600;">Live (0s ago)</td>
+            <td style="color: #ffffff;">${escapeHtml(host.name)}</td>
+            <td style="color: #f87171; font-weight: 700;">Core-Brocade-X7-1B · Slot 4 Port 12</td>
+            <td><code style="color: #fca5a5;">swFCPortScn (Offline)</code></td>
+            <td><span class="status-badge critical">CRITICAL</span></td>
+            <td style="color: #e2e8f0;">Switch emitted SNMP link-down trap. Dedicated SAN path slice turned RED. Dual-fabric failover active.</td>
+          </tr>
+          <tr>
+            <td style="color: #94a3b8;">12m ago</td>
+            <td style="color: #cbd5e1;">${escapeHtml(host.name)}</td>
+            <td style="color: #94a3b8;">Core-MDS-9710-1A · Slot 2 Port 8</td>
+            <td><code style="color: #94a3b8;">snmpPollNominal</code></td>
+            <td><span class="status-badge healthy">NOMINAL</span></td>
+            <td style="color: #94a3b8;">Direct SNMPv3 poll confirmed nominal buffer credits (16/16).</td>
+          </tr>
+        `;
+      } else {
+        if (alertBox) alertBox.classList.remove('has-crit');
+        alertTbody.innerHTML = `
+          <tr>
+            <td style="color: #34d399; font-weight: 600;">Nominal</td>
+            <td style="color: #ffffff;">${escapeHtml(host.name)}</td>
+            <td style="color: #00f2fe;">All Connected Switches (Cisco &amp; Brocade)</td>
+            <td><code style="color: #34d399;">snmpTrapsNominal</code></td>
+            <td><span class="status-badge healthy">NOMINAL</span></td>
+            <td style="color: #94a3b8;">All physical SAN paths active across Fabric A and Fabric B. Zero frame drops.</td>
+          </tr>
+        `;
+      }
+    }
+  }
+
+  // View Navigation Manager
+  function navigateTo(targetView) {
+    activeView = targetView;
+
+    if (viewHome) viewHome.style.display = (targetView === 'home') ? 'block' : 'none';
+    if (viewCluster) viewCluster.style.display = (targetView === 'cluster') ? 'block' : 'none';
+    if (viewHost) viewHost.style.display = (targetView === 'host') ? 'block' : 'none';
+
+    const app = AppWiseData.apps.find(a => a.id === currentAppId) || AppWiseData.apps[0];
+    const cluster = app.clusters.find(c => c.id === currentClusterId) || app.clusters[0];
+    const host = cluster.hosts.find(h => h.id === currentHostId) || cluster.hosts[0];
+
+    if (crumbHome) {
+      crumbHome.className = `appwise-crumb ${targetView === 'home' ? 'active' : ''}`;
+    }
+
+    if (crumbApp && crumbSep1) {
+      if (targetView === 'cluster' || targetView === 'host') {
+        crumbSep1.style.display = 'inline';
+        crumbApp.style.display = 'inline-block';
+        crumbApp.innerText = app.name;
+        crumbApp.className = `appwise-crumb ${targetView === 'cluster' ? 'active' : ''}`;
+      } else {
+        crumbSep1.style.display = 'none';
+        crumbApp.style.display = 'none';
+      }
+    }
+
+    if (crumbHost && crumbSep2) {
+      if (targetView === 'host') {
+        crumbSep2.style.display = 'inline';
+        crumbHost.style.display = 'inline-block';
+        crumbHost.innerText = host.name;
+        crumbHost.className = 'appwise-crumb active';
+      } else {
+        crumbSep2.style.display = 'none';
+        crumbHost.style.display = 'none';
+      }
+    }
+
+    if (targetView === 'home') renderHomeView();
+    else if (targetView === 'cluster') renderClusterView();
+    else if (targetView === 'host') renderHostView();
+  }
+
+  if (crumbHome) crumbHome.addEventListener('click', () => navigateTo('home'));
+  if (crumbApp) crumbApp.addEventListener('click', () => navigateTo('cluster'));
+  if (crumbHost) crumbHost.addEventListener('click', () => navigateTo('host'));
+
+  if (btnSimulateDown) {
+    btnSimulateDown.addEventListener('click', () => {
+      isPortDownSimulated = !isPortDownSimulated;
+
+      if (isPortDownSimulated) {
+        btnSimulateDown.classList.add('active');
+        if (btnSimText) btnSimText.innerText = '↺ Restore Switch: Slot 4 Port 12 ONLINE';
+        showToast('⚡ [SNMP TRAP]: Brocade switch reported Slot 4 Port 12 DOWN. SAN path slice turned RED.');
+      } else {
+        btnSimulateDown.classList.remove('active');
+        if (btnSimText) btnSimText.innerText = '⚡ Simulate Switch: Slot 4 Port 12 DOWN';
+        showToast('↺ [SNMP RECOVERY]: Slot 4 Port 12 restored ONLINE. All SAN paths nominal.');
+      }
+
+      navigateTo(activeView);
+    });
+  }
+
+  if (btnResetNominal) {
+    btnResetNominal.addEventListener('click', () => {
+      isPortDownSimulated = false;
+      if (btnSimulateDown) btnSimulateDown.classList.remove('active');
+      if (btnSimText) btnSimText.innerText = '⚡ Simulate Switch: Slot 4 Port 12 DOWN';
+      showToast('↺ All SAN paths nominal. Zero packet drop state.');
+      navigateTo(activeView);
+    });
+  }
+
+  navigateTo('home');
 }

@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-  <title>Infrasights v2.10 | Enterprise SAN Infrastructure Visibility & Monitoring</title>
-  <meta name="description" content="Infrasights v2.10 provides centralized Fibre Channel SAN visibility with data collected directly from SAN switches. Real-time buffer credit tracking, SFP optics diagnostics, and fabric health scoring without intermediary middleware.">
-  <meta name="keywords" content="SAN monitoring, Fibre Channel, Enterprise Director, Fabric Switch, buffer-to-buffer credits, SFP optics diagnostics, storage infrastructure observability, Infrasights v2.10, SAN telemetry, FC congestion tracking">
+  <title>Infrasights v2.10 | App-Wise SAN Path Monitoring & DC Infrastructure Visibility</title>
+  <meta name="description" content="Infrasights v2.10 provides a one-view dashboard of complex DC structure SAN paths App-wise. Multi-level pie charts map server clusters and hostnames to physical SAN paths with real-time SNMP forwarding down alerts.">
+  <meta name="keywords" content="Infrasights v2.10, App-wise SAN monitoring, Fibre Channel, Cisco SAN switches, Brocade SAN switches, SNMP forwarding, SAN paths, server clusters, data center storage, DC infrastructure dashboard">
   <meta name="author" content="Infrasights Enterprise Engineering">
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <meta name="theme-color" content="#080d1a">
@@ -36,8 +36,8 @@
   <meta property="og:url" content="https://infrasights.in/">
   <meta property="og:site_name" content="Infrasights">
   <meta property="og:locale" content="en_US">
-  <meta property="og:title" content="Infrasights v2.10 | Your SAN Infrastructure. One Clear Picture.">
-  <meta property="og:description" content="Centralized SAN visibility collected directly from Fibre Channel switches. Deterministic telemetry and operational clarity for enterprise storage teams.">
+  <meta property="og:title" content="Infrasights v2.10 | Complex DC SAN Paths. One App-Wise View.">
+  <meta property="og:description" content="One-view dashboard of complex DC structure SAN paths App-wise. Multi-level pie charts map server clusters and hostnames to physical SAN paths with real-time SNMP forwarding alerts.">
   <meta property="og:image" content="https://infrasights.in/assets/og-image.png">
   <meta property="og:image:secure_url" content="https://infrasights.in/assets/og-image.png">
   <meta property="og:image:type" content="image/png">
@@ -48,8 +48,8 @@
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:url" content="https://infrasights.in/">
-  <meta name="twitter:title" content="Infrasights v2.10 | Enterprise SAN Infrastructure Observability">
-  <meta name="twitter:description" content="Direct switch-level SAN observability. Real-time buffer-to-buffer credit monitoring, SFP optics diagnostics, and fabric health scoring.">
+  <meta name="twitter:title" content="Infrasights v2.10 | App-Wise SAN Infrastructure Observability">
+  <meta name="twitter:description" content="One-view dashboard of complex DC SAN paths App-wise. Multi-level pie charts from server clusters to physical SAN paths with real-time SNMP forwarding alerts.">
   <meta name="twitter:image" content="https://infrasights.in/assets/og-image.png">
   <meta name="twitter:alt" content="Infrasights v2.10 Enterprise SAN Platform">
 
@@ -67,15 +67,15 @@
         "applicationSubCategory": "SAN Storage Infrastructure Observability",
         "softwareVersion": "2.10.4",
         "url": "https://infrasights.in/",
-        "description": "Enterprise SAN infrastructure observability platform providing direct switch-level monitoring, buffer credit tracking, and fabric optics health analysis.",
+        "description": "Enterprise one-view dashboard mapping complex DC structure SAN paths App-wise, from server clusters and hostnames to physical SAN switch paths with real-time SNMP forwarding down alerts.",
         "image": "https://infrasights.in/assets/og-image.png",
         "featureList": [
-          "Direct Switch Telemetry via REST/SNMPv3/SSH",
-          "Buffer Credit Starvation & Zero-Credit Detection",
-          "Physical Layer SFP DOM Optics Diagnostics (dBm/Temp/Voltage)",
-          "Hardware Register Error Correlation (EncOut, CRC, Link Reset)",
-          "Living SAN Topology Canvas & Fabric Path Animation",
-          "Read-Only Zero-Agent Architecture"
+          "App-Wise Complex DC Structure SAN Path Mapping",
+          "Multi-Level Pie Topologies (App -> Server Cluster -> Hostname -> SAN Path Slices)",
+          "Real-Time SNMP Trap Forwarding & Dynamic Red Slice Alerting (Slot X Port Y)",
+          "Universal Switch Support: Cisco MDS, Brocade & SNMP Forwarding SAN Switches",
+          "Dual-Fabric (Fabric A / Fabric B) Redundancy & Congestion Analytics",
+          "Read-Only Zero-Agent Switch Architecture"
         ],
         "publisher": {
           "@type": "Organization",
@@ -183,7 +183,23 @@
             "name": "Which SAN switch environments are supported?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Infrasights supports modern enterprise Fibre Channel director and edge switches across all leading multi-vendor platforms. Support includes 16G, 32G, and 64G FC optics, modular blades, and high-speed ISL trunks."
+              "text": "Infrasights is natively compatible with Cisco MDS director and fabric switches, Brocade (Broadcom) enterprise fabrics, and any enterprise Fibre Channel switches with SNMP forwarding. Telemetry is collected directly via SNMP trap forwarding (SW-MIB, FA-MIB, MAPS) and secure REST APIs."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How does Infrasights map complex DC SAN paths App-wise?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Infrasights bridges the gap between applications and physical storage fabrics through a 3-tier topology hierarchy. The home dashboard features app cards with pie charts where every slice is a server cluster; clicking an app reveals cluster pies; clicking a cluster opens the hostname view where every pie slice represents a dedicated physical SAN path."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What happens when a switch reports that slot X port Y is down?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "When a Cisco, Brocade, or SNMP-enabled switch detects a link failure and emits an SNMP trap for slot X port Y, Infrasights ingests the trap, correlates the hardware port to its associated hostname and server cluster, and instantly turns the dedicated SAN path slice red in the dashboard, notifying operations teams immediately."
             }
           },
           {
@@ -281,16 +297,16 @@
         <div class="hero-content">
           <div class="hero-version-pill">
             <span class="version-tag">RELEASE v2.10</span>
-            <span>Direct Fibre Channel Infrastructure Observability</span>
+            <span>App-Wise Data Center SAN Path Observability</span>
           </div>
 
           <h1 class="hero-title">
-            Your SAN infrastructure. <br>
-            <span class="text-gradient">One clear picture.</span>
+            Complex DC SAN paths. <br>
+            <span class="text-gradient">One App-wise operational view.</span>
           </h1>
 
           <p class="hero-desc">
-            Infrasights gives infrastructure teams a centralized way to monitor and understand their SAN environment, with data collected directly from SAN switches. No intermediary software required. Zero agent footprint.
+            Infrasights gives data center and storage teams a unified dashboard mapping complex DC SAN paths App-wise. From application clusters down to individual hostnames, every slice of the pie reflects your physical SAN paths. If a switch says slot X port Y is down, the dedicated slice turns red in real time. Built for Cisco, Brocade, and any SAN switch with SNMP forwarding.
           </p>
 
           <div class="hero-ctas">
@@ -298,8 +314,8 @@
               <span>Request a Deployment</span>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
             </button>
-            <a href="#capabilities" class="btn btn-secondary">
-              <span>Explore Platform</span>
+            <a href="#interface" class="btn btn-secondary">
+              <span>Explore App-Wise Dashboard</span>
             </a>
           </div>
 
@@ -307,18 +323,26 @@
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
             </svg>
-            <span>Built for enterprise storage, SAN administrators, and data center operations teams.</span>
+            <span>Built for enterprise storage, SAN administrators, and data center operations teams. Compatible with Cisco, Brocade & any SNMP forwarding switch.</span>
           </div>
         </div>
 
-        <!-- Living SAN Topology Canvas -->
+        <!-- Living SAN Topology Canvas: Interactive App-Wise Holographic Motion Graphics Visualizer -->
         <div class="canvas-container">
           <div class="canvas-hud">
-            <div class="hud-pill active">
-              <span class="pulse-dot" style="display:inline-block;width:6px;height:6px;background:#00f2fe;border-radius:50%;margin-right:4px;"></span>
-              LIVE TOPOLOGY TELEMETRY (v2.10)
+            <div class="hud-left-group" style="display:flex;align-items:center;gap:0.6rem;flex-wrap:wrap;">
+              <div class="hud-pill active">
+                <span class="pulse-dot" style="display:inline-block;width:6px;height:6px;background:#00f2fe;border-radius:50%;margin-right:4px;"></span>
+                APP-WISE SAN TOPOLOGY (v2.10)
+              </div>
+              <div class="hud-tier-selector" style="display:flex;gap:0.3rem;">
+                <button type="button" class="hud-tier-btn active" data-tier="overview">Full 3-Tier View</button>
+                <button type="button" class="hud-tier-btn" data-tier="app">1. App Pies</button>
+                <button type="button" class="hud-tier-btn" data-tier="cluster">2. Server Clusters</button>
+                <button type="button" class="hud-tier-btn" data-tier="host">3. Host SAN Paths</button>
+              </div>
             </div>
-            <div class="hud-pill">DIRECT SWITCH POLLING (1s CADENCE)</div>
+            <div class="hud-pill">CISCO &amp; BROCADE SNMP FORWARDING ACTIVE</div>
           </div>
 
           <div class="canvas-viewport">
@@ -328,12 +352,13 @@
 
           <div class="canvas-controls">
             <div class="canvas-legend">
-              <div class="legend-item"><span class="legend-dot switch"></span><span>FC Switch</span></div>
-              <div class="legend-item"><span class="legend-dot isl"></span><span>ISL Trunk</span></div>
-              <div class="legend-item"><span class="legend-dot storage"></span><span>Storage/Host</span></div>
+              <div class="legend-item"><span class="legend-dot switch"></span><span>Cisco MDS / Brocade X7</span></div>
+              <div class="legend-item"><span class="legend-dot isl"></span><span>Fabric A/B Conduits</span></div>
+              <div class="legend-item"><span class="legend-dot storage"></span><span>App &amp; Host SAN Slices</span></div>
+              <div class="legend-item" style="color:#f87171;"><span class="legend-dot" style="background:#ef4444;box-shadow:0 0 6px #ef4444;"></span><span>Red Slice (Slot 4 Port 12 Down)</span></div>
             </div>
             <button id="toggle-congestion-btn" class="btn btn-outline btn-sm" style="font-size:0.75rem;padding:0.35rem 0.75rem;">
-              Simulate Buffer Wait
+              Simulate Port Down
             </button>
           </div>
         </div>
@@ -345,20 +370,20 @@
       <div class="container">
         <div class="metrics-grid">
           <div class="metric-item">
-            <div class="metric-val">100%</div>
-            <div class="metric-label">Direct Switch Telemetry (Agentless)</div>
+            <div class="metric-val">App-to-Port</div>
+            <div class="metric-label">One-View App & Cluster SAN Path Mapping</div>
+          </div>
+          <div class="metric-item">
+            <div class="metric-val">Cisco & Brocade</div>
+            <div class="metric-label">Universal SNMP Forwarding Switch Compatibility</div>
           </div>
           <div class="metric-item">
             <div class="metric-val">Sub-Sec</div>
-            <div class="metric-label">Hardware Register Polling Resolution</div>
+            <div class="metric-label">Real-Time Red Slice Port Failure Alerting</div>
           </div>
           <div class="metric-item">
-            <div class="metric-val">Zero</div>
-            <div class="metric-label">Agent Overhead on Compute Hosts</div>
-          </div>
-          <div class="metric-item">
-            <div class="metric-val">v2.10</div>
-            <div class="metric-label">Multi-Vendor Enterprise Fibre Channel</div>
+            <div class="metric-val">Zero Agent</div>
+            <div class="metric-label">Direct Switch Telemetry & SNMP Trap Streaming</div>
           </div>
         </div>
       </div>
@@ -373,9 +398,9 @@
           <span class="pulse-dot"></span>
           Operational Reality
         </div>
-        <h2 class="section-title">The SAN Visibility Challenge</h2>
+        <h2 class="section-title">The SAN Visibility Challenge in Complex Data Centers</h2>
         <p class="section-subtitle">
-          Fibre Channel fabrics are mission-critical, yet diagnosing health and congestion often requires manually piecing together fragmented switch CLIs and disconnected screens.
+          In complex DC architectures, when a Fibre Channel switch reports a port failure, storage and infrastructure teams struggle to correlate which business applications, server clusters, and host paths are degraded.
         </p>
 
         <div class="comparison-grid">
@@ -383,24 +408,24 @@
           <div class="compare-card before">
             <div class="compare-header">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
-              <h3 class="compare-title">Without Infrasights (Fragmented Ops)</h3>
+              <h3 class="compare-title">Without Infrasights (Fragmented DC Ops)</h3>
             </div>
             <ul class="compare-list">
               <li>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
-                <span><strong>Device-by-Device CLI Inspection:</strong> Engineers manually SSH into individual switches to parse <code>porterrshow</code> and <code>show interface counters</code>.</span>
+                <span><strong>No Application Context:</strong> When switch logs report <code>slot 4 port 12 offline</code>, admins cannot tell which mission-critical app or cluster is impacted without manual cross-referencing.</span>
               </li>
               <li>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
-                <span><strong>Hidden Buffer Credit Starvation:</strong> Slow-drain devices deplete buffer credits quietly, cascading across ISLs before alarms trigger.</span>
+                <span><strong>Device-by-Device CLI Sifting:</strong> Engineers manually SSH across Cisco and Brocade switches to parse <code>porterrshow</code> and <code>show interface counters</code> during high-pressure incidents.</span>
               </li>
               <li>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
-                <span><strong>Heavy Middleware Overhead:</strong> Relying on multi-tier management applications introduces licensing costs, delays, and software complexity.</span>
+                <span><strong>Hidden Path Failovers:</strong> Silent SAN path drops leave server clusters operating on a single fabric with zero redundancy, completely undetected until secondary paths fail.</span>
               </li>
               <li>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
-                <span><strong>Knowledge Concentration:</strong> SAN troubleshooting depends heavily on a handful of senior specialists who know where to look.</span>
+                <span><strong>Vendor Console Silos:</strong> Fragmented tools for different switch models prevent a cohesive, single-pane view of data center SAN storage topologies.</span>
               </li>
             </ul>
           </div>
@@ -409,24 +434,24 @@
           <div class="compare-card after">
             <div class="compare-header">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="9 12 12 15 16 9"></polyline></svg>
-              <h3 class="compare-title">With Infrasights v2.10 (Operational Clarity)</h3>
+              <h3 class="compare-title">With Infrasights v2.10 (App-Wise One-View)</h3>
             </div>
             <ul class="compare-list">
               <li>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                <span><strong>Centralized SAN Visibility:</strong> Unified health, status, and port metrics across all fabrics in a single operational dashboard.</span>
+                <span><strong>App-Wise One-View Portal:</strong> Complex DC SAN paths mapped by application. Home page pie charts represent server clusters at a glance.</span>
               </li>
               <li>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                <span><strong>Direct Switch Data Collection:</strong> Direct API and telemetry ingestion straight from Fibre Channel switches without proprietary intermediaries.</span>
+                <span><strong>3-Tier Drill-Down to SAN Paths:</strong> Click an app card to see cluster pies; click a cluster to view hostnames; in each hostname, every slice represents a dedicated physical SAN path.</span>
               </li>
               <li>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                <span><strong>Deterministic Congestion Diagnostics:</strong> Immediate tracking of zero-credit transitions, optical dBm degradation, and CRC bit errors.</span>
+                <span><strong>Real-Time Red Slice Alerting:</strong> If a switch reports slot X port Y down via SNMP forwarding, the exact dedicated SAN path slice turns red instantly.</span>
               </li>
               <li>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                <span><strong>Accessible SAN Operations:</strong> Empower the broader infrastructure and data center team to understand and triage fabric status quickly.</span>
+                <span><strong>Cisco & Brocade Compatibility:</strong> Universal support for Cisco MDS, Brocade (Broadcom), and any enterprise SAN switches with SNMP forwarding.</span>
               </li>
             </ul>
           </div>
@@ -443,82 +468,82 @@
           <span class="pulse-dot"></span>
           Platform Capabilities
         </div>
-        <h2 class="section-title">Engineered for Fibre Channel Storage Operations</h2>
+        <h2 class="section-title">Engineered for Complex Data Center SAN Structures</h2>
         <p class="section-subtitle">
-          Infrasights v2.10 focuses on verified, deterministic hardware telemetry collected straight from director and edge switches.
+          Infrasights v2.10 maps Fibre Channel storage fabrics App-wise, delivering instant correlation from high-level business clusters down to individual physical switch ports.
         </p>
 
         <div class="capabilities-grid">
-          <!-- Card 1 -->
+          <!-- Card 1: App-Wise Mapping -->
           <div class="capability-card">
             <div class="card-icon">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
             </div>
-            <h3 class="card-title">Direct Switch Data Collection</h3>
+            <h3 class="card-title">App-Wise SAN Path Mapping</h3>
             <p class="card-desc">
-              Connects directly to SAN switches via secure REST APIs, SNMP, and SSH. Bypasses intermediate management software, eliminating extra points of failure and licensing overhead.
+              Organizes complex data center fabrics around your business applications. Maps critical workloads (Core Banking, Payment Gateways, ERP) to their underlying server clusters and physical SAN paths.
             </p>
-            <span class="card-badge">Zero Intermediary Dependency</span>
+            <span class="card-badge">Application-Centric Topology</span>
           </div>
 
-          <!-- Card 2 -->
+          <!-- Card 2: Multi-Level Pie Hierarchy -->
           <div class="capability-card">
             <div class="card-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 1 10 10h-10z"/><path d="M12 12L2 12a10 10 0 0 1 10-10z"/></svg>
             </div>
-            <h3 class="card-title">Buffer Credit Starvation Tracking</h3>
+            <h3 class="card-title">Multi-Level Pie Topologies</h3>
             <p class="card-desc">
-              Continuously monitors buffer-to-buffer (B2B) credit timers and zero-credit states. Instantly isolates slow-drain devices before backpressure degrades ISL trunks and stalls tier-0 storage.
+              Intuitive 3-tier drill-down: The home portal features app cards with cluster slices; clicking an app reveals cluster pies; clicking a cluster opens the hostname where every slice is an individual SAN path.
             </p>
-            <span class="card-badge">Deterministic B2B Monitoring</span>
+            <span class="card-badge">App → Cluster → Host → Port</span>
           </div>
 
-          <!-- Card 3 -->
-          <div class="capability-card">
-            <div class="card-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-            </div>
-            <h3 class="card-title">SFP Physical Layer & Optics Diagnostics</h3>
-            <p class="card-desc">
-              Tracks Digital Optical Monitoring (DOM) metrics including TX/RX optical power (dBm), laser bias current, temperature, and supply voltage to detect degrading transceivers and cables prior to link flap.
-            </p>
-            <span class="card-badge">DOM Transceiver Metrics</span>
-          </div>
-
-          <!-- Card 4 -->
+          <!-- Card 3: Real-Time SNMP Trap Forwarding -->
           <div class="capability-card">
             <div class="card-icon">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
             </div>
-            <h3 class="card-title">Hardware Error Register Correlation</h3>
+            <h3 class="card-title">Real-Time SNMP Trap Forwarding</h3>
             <p class="card-desc">
-              Aggregates raw hardware counters—CRC errors, bit error rates (BER), encoding-out errors, and Class 3 discards—into prioritized fabric health indicators so you can distinguish dirty fibers from oversubscription.
+              Ingests SNMP traps (SW-MIB, FA-MIB, MAPS) directly from switches. If a switch signals that slot X port Y is down, the slice dedicated to that SAN path instantly turns red in the operational dashboard.
             </p>
-            <span class="card-badge">Register-Level Accuracy</span>
+            <span class="card-badge">Slot X Port Y Red Slice Alert</span>
           </div>
 
-          <!-- Card 5 -->
+          <!-- Card 4: Cisco & Brocade Compatibility -->
+          <div class="capability-card">
+            <div class="card-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            </div>
+            <h3 class="card-title">Cisco, Brocade & Universal SNMP Support</h3>
+            <p class="card-desc">
+              Compatible with Cisco MDS director and fabric switches, Brocade (Broadcom) Gen 6/Gen 7 fabrics, and any enterprise SAN switches equipped with standard SNMP trap forwarding.
+            </p>
+            <span class="card-badge">Universal Multi-Vendor SAN</span>
+          </div>
+
+          <!-- Card 5: Dual Fabric Redundancy Audit -->
           <div class="capability-card">
             <div class="card-icon">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
             </div>
-            <h3 class="card-title">Fabric Topology & WWPN Zoning Audit</h3>
+            <h3 class="card-title">Dual-Fabric Redundancy Audit</h3>
             <p class="card-desc">
-              Provides live visualization of active zones, WWPN logins (FLOGI/PLOGI), and multipath fabric paths. Understand exactly which targets and initiators share links and where congestion can spread.
+              Continuously tracks Fabric A and Fabric B multi-path states. Instantly isolates when a host or server cluster loses secondary path redundancy before application downtime can occur.
             </p>
-            <span class="card-badge">Name Server Integration</span>
+            <span class="card-badge">Fabric A & Fabric B High Availability</span>
           </div>
 
-          <!-- Card 6 -->
+          <!-- Card 6: Zero-Agent Direct Telemetry -->
           <div class="capability-card">
             <div class="card-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
             </div>
-            <h3 class="card-title">Focused Operational Investigation</h3>
+            <h3 class="card-title">Zero-Agent Direct Telemetry</h3>
             <p class="card-desc">
-              Streamline investigations with unified search across WWPNs, switch hostnames, port aliases, and fabrics. Move directly from a high-level status indicator to the specific offending port in seconds.
+              Queries switch control planes directly via secure SNMPv3, REST APIs, and SSH. Requires zero software installation on server hosts, virtual machines, or backend enterprise storage arrays.
             </p>
-            <span class="card-badge">Fast Root-Cause Triage</span>
+            <span class="card-badge">100% Agentless DC Footprint</span>
           </div>
         </div>
       </div>
@@ -545,7 +570,7 @@
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/></svg>
             </div>
             <div class="node-title">SAN Switches</div>
-            <div class="node-desc">Core & Edge Directors</div>
+            <div class="node-desc">Cisco, Brocade & SNMP</div>
           </div>
 
           <div class="arch-arrow">→</div>
@@ -554,8 +579,8 @@
             <div class="node-icon">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
             </div>
-            <div class="node-title">Collection Layer</div>
-            <div class="node-desc">Direct Polling Engine</div>
+            <div class="node-title">Collection & Traps</div>
+            <div class="node-desc">SNMP Forwarding Engine</div>
           </div>
 
           <div class="arch-arrow">→</div>
@@ -564,8 +589,8 @@
             <div class="node-icon">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
             </div>
-            <div class="node-title">Normalization</div>
-            <div class="node-desc">Register Parsing</div>
+            <div class="node-title">Correlation Engine</div>
+            <div class="node-desc">App-to-Path Normalization</div>
           </div>
 
           <div class="arch-arrow">→</div>
@@ -574,8 +599,8 @@
             <div class="node-icon">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
             </div>
-            <div class="node-title">Infrasights DB</div>
-            <div class="node-desc">Time-Series Store</div>
+            <div class="node-title">InfluxDB Store</div>
+            <div class="node-desc">Time-Series State Store</div>
           </div>
 
           <div class="arch-arrow">→</div>
@@ -585,7 +610,7 @@
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
             </div>
             <div class="node-title">Backend APIs</div>
-            <div class="node-desc">gRPC & REST</div>
+            <div class="node-desc">High-Speed Telemetry</div>
           </div>
 
           <div class="arch-arrow">→</div>
@@ -594,8 +619,8 @@
             <div class="node-icon">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
             </div>
-            <div class="node-title">Operations UI</div>
-            <div class="node-desc">Unified Dashboard</div>
+            <div class="node-title">App-Wise UI</div>
+            <div class="node-desc">One-View Dashboard</div>
           </div>
 
           <div class="arch-arrow">→</div>
@@ -604,8 +629,8 @@
             <div class="node-icon">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
             </div>
-            <div class="node-title">Storage Team</div>
-            <div class="node-desc">Faster Triage</div>
+            <div class="node-title">DC Ops & Storage</div>
+            <div class="node-desc">Root-Cause Clarity</div>
           </div>
         </div>
 
@@ -615,9 +640,9 @@
             <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
           </div>
           <div class="arch-detail-text">
-            <h4 id="arch-detail-title">1. SAN Switches (Direct Data Origin)</h4>
+            <h4 id="arch-detail-title">1. SAN Switches (Cisco, Brocade & SNMP Forwarding Switches)</h4>
             <p id="arch-detail-text">
-              Infrasights communicates directly with enterprise Fibre Channel director and edge switches. Telemetry is collected directly from switch control planes via native REST APIs, SNMPv3, and secure SSH polling without requiring intermediate management proxies or external element managers.
+              Infrasights connects directly to enterprise Fibre Channel director and fabric switches, including Cisco MDS series, Brocade (Broadcom) fabrics, and any SAN switches supporting SNMP trap forwarding. Telemetry and state-change traps (SW-MIB, FA-MIB, MAPS) are ingested directly without proprietary intermediaries.
             </p>
           </div>
         </div>
@@ -631,11 +656,11 @@
       <div class="container">
         <div class="section-tag">
           <span class="pulse-dot"></span>
-          Operator Experience
+          One-View Operations Experience
         </div>
-        <h2 class="section-title">Infrasights v2.10 Operational Dashboard</h2>
+        <h2 class="section-title">Infrasights v2.10 App-Wise Operational Dashboard</h2>
         <p class="section-subtitle">
-          Engineered for fast at-a-glance status assessments and drill-down investigation into ports, optics, and buffer credit states.
+          One-view dashboard of complex DC structure SAN paths App-wise. From application cards with server cluster slices down to hostnames with dedicated SAN path slices.
         </p>
 
         <div class="mockup-window">
@@ -646,42 +671,226 @@
               <span class="window-dot yellow"></span>
               <span class="window-dot green"></span>
             </div>
-            <div class="mockup-title-bar">infrasights://fabric-ops/dashboard.v2.10</div>
-            <span class="mockup-badge">DIRECT POLLING ACTIVE</span>
+            <div class="mockup-title-bar">infrasights://dc-core/app-wise-san-topology.v2.10</div>
+            <span class="mockup-badge">SNMP FORWARDING ACTIVE (CISCO & BROCADE)</span>
           </div>
 
           <!-- Navigation Tabs -->
           <div class="mockup-tabs">
-            <button class="mockup-tab active" data-tab="tab-overview">Fabric Overview</button>
-            <button class="mockup-tab" data-tab="tab-optics">Port Telemetry & Optics</button>
-            <button class="mockup-tab" data-tab="tab-switches">Switch Inventory (Direct)</button>
-            <button class="mockup-tab" data-tab="tab-congestion">Congestion Alarms (B2B)</button>
+            <button class="mockup-tab active" data-tab="tab-overview">App-Wise SAN Dashboard</button>
+            <button class="mockup-tab" data-tab="tab-optics">App-to-Path Mapping &amp; Redundancy</button>
+            <button class="mockup-tab" data-tab="tab-switches">Switch Compatibility (Cisco, Brocade &amp; SNMP)</button>
+            <button class="mockup-tab" data-tab="tab-congestion">SNMP Traps &amp; Red Slice Alerts</button>
           </div>
 
           <!-- Tab Content Panes -->
           <div class="mockup-body">
-            <!-- Pane 1: Fabric Overview -->
+            <!-- Pane 1: App-Wise SAN Dashboard -->
             <div id="tab-overview" class="mockup-tab-pane">
+              <!-- Live Interactive App-Wise Dashboard Component -->
+              <div class="appwise-dashboard" id="appwise-dashboard">
+                <!-- Interactive Navigation & Simulation Bar -->
+                <div class="appwise-toolbar">
+                  <div class="appwise-breadcrumb" id="appwise-breadcrumb" aria-label="Topology Drill-Down Navigation">
+                    <button class="appwise-crumb active" id="crumb-home" data-level="home">Home (DC App Portal)</button>
+                    <span class="appwise-sep" id="crumb-sep-1" style="display:none;">›</span>
+                    <button class="appwise-crumb" id="crumb-app" data-level="cluster" style="display:none;">Application Clusters</button>
+                    <span class="appwise-sep" id="crumb-sep-2" style="display:none;">›</span>
+                    <button class="appwise-crumb" id="crumb-host" data-level="host" style="display:none;">Host SAN Paths</button>
+                  </div>
+
+                  <div class="appwise-controls">
+                    <button id="btn-simulate-down" class="appwise-sim-btn danger" title="Simulate SNMP link-down trap from switch">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                      <span id="btn-sim-text">⚡ Simulate Switch: Slot 4 Port 12 DOWN</span>
+                    </button>
+                    <button id="btn-reset-nominal" class="appwise-sim-btn reset" title="Restore nominal port state">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+                      <span>Reset Nominal</span>
+                    </button>
+                    <div class="appwise-meta-badge">
+                      <span class="pulse-dot" style="display:inline-block;width:6px;height:6px;background:#34d399;border-radius:50%;"></span>
+                      <span>Cisco &amp; Brocade SNMP Forwarding</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Level 1: Home Page (App-Wise DC Portal) -->
+                <div class="appwise-view" id="appwise-view-home">
+                  <div class="appwise-view-header">
+                    <div class="appwise-view-title">
+                      <span>Data Center Application Portal — One-View Dashboard</span>
+                    </div>
+                    <div class="appwise-view-desc">
+                      Complex DC SAN paths organized App-wise. Each card features an interactive pie chart where <strong>every slice is a server cluster</strong>. Click any application card to drill down into its server clusters.
+                    </div>
+                  </div>
+
+                  <div class="appwise-cards-grid" id="appwise-home-grid">
+                    <!-- Populated dynamically by AppWiseDashboard -->
+                  </div>
+                </div>
+
+                <!-- Level 2: Cluster View (App Detail Page) -->
+                <div class="appwise-view appwise-cluster-view" id="appwise-view-cluster">
+                  <div class="appwise-view-header">
+                    <div class="appwise-view-title">
+                      <span id="cluster-view-app-title">Core Banking Engine (CBS)</span>
+                      <span class="appwise-card-short" id="cluster-view-app-badge">Server Cluster Topology</span>
+                    </div>
+                    <div class="appwise-view-desc">
+                      All server clusters supporting this application. In cluster pies, slices represent member physical hosts and paths. Click a cluster pie to inspect its <strong>hostname and individual SAN path slices</strong>.
+                    </div>
+                  </div>
+
+                  <div class="appwise-cluster-grid" id="cluster-cards-container">
+                    <!-- Populated dynamically by AppWiseDashboard -->
+                  </div>
+                </div>
+
+                <!-- Level 3: Hostname View (Host Detail Page) -->
+                <div class="appwise-view appwise-host-view" id="appwise-view-host">
+                  <div class="appwise-view-header">
+                    <div class="appwise-view-title">
+                      <span id="host-view-hostname">srv-cbs-db01.dc1.prod</span>
+                      <span class="appwise-card-short" id="host-view-ip">10.140.24.101</span>
+                    </div>
+                    <div class="appwise-view-desc">
+                      <strong>In the hostname view, every slice of the pie indicates a SAN path.</strong> If a switch reports slot X port Y down via SNMP forwarding, the dedicated slice turns <strong>RED</strong>.
+                    </div>
+                  </div>
+
+                  <!-- Host Selection Pills for multi-node clusters -->
+                  <div class="appwise-host-selector" id="host-view-selector">
+                    <!-- Populated dynamically -->
+                  </div>
+
+                  <div class="appwise-host-layout">
+                    <!-- Fabric A (Cisco MDS) -->
+                    <div class="appwise-fabric-card fabric-a" id="fabric-a-card">
+                      <div class="appwise-fabric-title">
+                        <span id="fabric-a-title">Fabric A (Cisco MDS)</span>
+                        <span class="status-badge healthy" id="fabric-a-badge">Nominal</span>
+                      </div>
+                      <div style="font-size: 0.7rem; color: var(--text-muted); margin-bottom: 0.75rem;" id="fabric-a-subtitle">
+                        SNMPv3 Trap Forwarding · Cisco MDS 9710 Core-1A
+                      </div>
+                      <div id="fabric-a-paths">
+                        <div class="appwise-path-item">
+                          <div>
+                            <span class="appwise-path-dot online"></span>
+                            <span class="appwise-path-name">Slot 2 / Port 8</span>
+                          </div>
+                          <span style="font-family: var(--font-mono); font-size: 0.7rem; color: #34d399;">32 Gbps FC</span>
+                        </div>
+                        <div class="appwise-path-item">
+                          <div>
+                            <span class="appwise-path-dot online"></span>
+                            <span class="appwise-path-name">Slot 2 / Port 9</span>
+                          </div>
+                          <span style="font-family: var(--font-mono); font-size: 0.7rem; color: #34d399;">32 Gbps FC</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Center: Hostname Pie (Every Slice = SAN Path) -->
+                    <div class="appwise-host-center">
+                      <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-primary);">
+                        Dedicated SAN Path Slices (Physical Fabric Paths)
+                      </div>
+                      <div class="appwise-host-pie-large-wrap">
+                        <canvas class="appwise-host-pie-large" id="canvas-host-large-pie" width="220" height="220"></canvas>
+                        <div class="appwise-host-pie-center-info">
+                          <span class="appwise-host-center-num" id="host-pie-center-num">4</span>
+                          <span class="appwise-host-center-status nominal" id="host-pie-center-status">4/4 HEALTHY</span>
+                        </div>
+                      </div>
+                      <div style="font-size: 0.75rem; color: var(--text-muted); line-height: 1.4;">
+                        Every slice indicates a physical SAN path. Slices turn red if a switch reports slot X port Y down.
+                      </div>
+                    </div>
+
+                    <!-- Fabric B (Brocade X7) -->
+                    <div class="appwise-fabric-card fabric-b" id="fabric-b-card">
+                      <div class="appwise-fabric-title">
+                        <span id="fabric-b-title">Fabric B (Brocade X7)</span>
+                        <span class="status-badge healthy" id="fabric-b-badge">Nominal</span>
+                      </div>
+                      <div style="font-size: 0.7rem; color: var(--text-muted); margin-bottom: 0.75rem;" id="fabric-b-subtitle">
+                        SNMP Trap Forwarding · Brocade X7 Core-1B
+                      </div>
+                      <div id="fabric-b-paths">
+                        <div class="appwise-path-item">
+                          <div>
+                            <span class="appwise-path-dot online"></span>
+                            <span class="appwise-path-name">Slot 4 / Port 11</span>
+                          </div>
+                          <span style="font-family: var(--font-mono); font-size: 0.7rem; color: #34d399;">32 Gbps FC</span>
+                        </div>
+                        <div class="appwise-path-item" id="host-path-item-4">
+                          <div>
+                            <span class="appwise-path-dot online" id="path-4-dot"></span>
+                            <span class="appwise-path-name" id="path-4-name">Slot 4 / Port 12</span>
+                          </div>
+                          <span style="font-family: var(--font-mono); font-size: 0.7rem;" id="path-4-speed">32 Gbps FC</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Live Recent Alerts (SNMP Forwarding Ingestion) -->
+                  <div class="appwise-alerts-box" id="host-alerts-box">
+                    <div class="appwise-alerts-title">
+                      <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                        <span>Recent Alerts — Switch SNMP Trap Forwarding Stream</span>
+                      </div>
+                      <span class="mockup-badge">SNMP FORWARDING ACTIVE</span>
+                    </div>
+                    <div class="telemetry-table-container">
+                      <table class="telemetry-table" id="host-alerts-table">
+                        <thead>
+                          <tr>
+                            <th style="width: 14%;">Time</th>
+                            <th style="width: 16%;">Host Server</th>
+                            <th style="width: 22%;">Switch · Port</th>
+                            <th style="width: 16%;">Trap Type</th>
+                            <th style="width: 12%;">Severity</th>
+                            <th>Description</th>
+                          </tr>
+                        </thead>
+                        <tbody id="host-alerts-tbody">
+                          <!-- Populated dynamically by AppWiseDashboard -->
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+
+                <div id="appwise-slice-tooltip" class="appwise-tooltip"></div>
+              </div>
+
+              <!-- High-Level Fabric Overview Telemetry Metrics -->
               <div class="dashboard-kpis">
                 <div class="kpi-card">
-                  <div class="kpi-title">Monitored Fabrics</div>
-                  <div class="kpi-value">2 (A / B)</div>
-                  <div class="kpi-status">Dual Fabric Redundant</div>
+                  <div class="kpi-title">Monitored Applications</div>
+                  <div class="kpi-value">4 Apps</div>
+                  <div class="kpi-status">Core Banking, FX, Lake</div>
                 </div>
                 <div class="kpi-card">
-                  <div class="kpi-title">Active FC Switches</div>
-                  <div class="kpi-value">28</div>
-                  <div class="kpi-status">100% Direct Polled</div>
+                  <div class="kpi-title">Server Clusters</div>
+                  <div class="kpi-value">10 Clusters</div>
+                  <div class="kpi-status">Mapped App-Wise</div>
                 </div>
                 <div class="kpi-card">
-                  <div class="kpi-title">Monitored Ports</div>
-                  <div class="kpi-value">1,152</div>
-                  <div class="kpi-status">32G / 64G Active</div>
+                  <div class="kpi-title">Physical Hostnames</div>
+                  <div class="kpi-value">14 Nodes</div>
+                  <div class="kpi-status">Dedicated Pie Views</div>
                 </div>
                 <div class="kpi-card">
-                  <div class="kpi-title">Fabric Health Score</div>
-                  <div class="kpi-value" style="color: #34d399;">99.85%</div>
-                  <div class="kpi-status">Zero Drop State</div>
+                  <div class="kpi-title">Dual Fabric SAN Paths</div>
+                  <div class="kpi-value" id="kpi-fabric-score" style="color: #34d399;">36 Active Paths</div>
+                  <div class="kpi-status" id="kpi-fabric-desc">Cisco MDS &amp; Brocade Redundant</div>
                 </div>
               </div>
 
@@ -689,156 +898,256 @@
                 <table class="telemetry-table">
                   <thead>
                     <tr>
-                      <th>Switch Name</th>
-                      <th>Fabric</th>
-                      <th>Model & Firmware</th>
-                      <th>Direct Polling Protocol</th>
-                      <th>B2B Credit State</th>
-                      <th>Optical Status</th>
-                      <th>Health Index</th>
+                      <th>Application Name</th>
+                      <th>Server Clusters</th>
+                      <th>Physical Hostnames</th>
+                      <th>Connected SAN Switches</th>
+                      <th>Fabric A Paths</th>
+                      <th>Fabric B Paths</th>
+                      <th>Redundancy Status</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
-                      <td style="color:#00f2fe;font-weight:600;">Core-Director-01A</td>
-                      <td>Fabric A</td>
-                      <td>Core-Director-01 (Gen 7 FC)</td>
-                      <td>REST API (TLS 1.3)</td>
-                      <td><span class="status-badge healthy">100% Nominal</span></td>
-                      <td><span class="status-badge healthy">TX: -1.8 / RX: -2.1 dBm</span></td>
-                      <td><strong style="color:#34d399">100%</strong></td>
+                      <td style="color:#00f2fe;font-weight:600;">Core Banking Engine (CBS)</td>
+                      <td>2 Clusters</td>
+                      <td>srv-cbs-app01, srv-cbs-app02, srv-cbs-db01, srv-cbs-db02</td>
+                      <td>Cisco MDS 9710 &amp; Brocade X7 Director</td>
+                      <td><span class="status-badge healthy">6 Paths Nominal</span></td>
+                      <td><span class="status-badge healthy">6 Paths Nominal</span></td>
+                      <td><strong style="color:#34d399">100% Redundant</strong></td>
                     </tr>
                     <tr>
-                      <td style="color:#00f2fe;font-weight:600;">Core-Director-01B</td>
-                      <td>Fabric B</td>
-                      <td>Core-Director-02 (Enterprise Modular FC)</td>
-                      <td>Direct SSH / SNMPv3</td>
-                      <td><span class="status-badge healthy">99.9% Nominal</span></td>
-                      <td><span class="status-badge healthy">TX: -1.9 / RX: -2.3 dBm</span></td>
-                      <td><strong style="color:#34d399">99.8%</strong></td>
+                      <td style="color:#00f2fe;font-weight:600;">Payment Gateway (PG)</td>
+                      <td>2 Clusters</td>
+                      <td>srv-pg-rt01, srv-pg-st01</td>
+                      <td>Brocade G620 Enterprise Switches</td>
+                      <td><span class="status-badge healthy">4 Paths Nominal</span></td>
+                      <td><span class="status-badge healthy">4 Paths Nominal</span></td>
+                      <td><strong style="color:#34d399">100% Redundant</strong></td>
                     </tr>
                     <tr>
-                      <td style="color:#00f2fe;font-weight:600;">Edge-SAN-SW-04A</td>
-                      <td>Fabric A</td>
-                      <td>Edge-SAN-SW-04 (High-Density 32G FC)</td>
-                      <td>REST API (Direct)</td>
-                      <td><span class="status-badge degraded">84.2% (Slow Drain)</span></td>
-                      <td><span class="status-badge degraded">Port 14 RX Low (-6.2 dBm)</span></td>
-                      <td><strong style="color:#fbbf24">88.5%</strong></td>
+                      <td style="color:#00f2fe;font-weight:600;">Treasury &amp; FX Trading</td>
+                      <td>2 Clusters</td>
+                      <td>srv-fx-node01, srv-fx-risk01</td>
+                      <td>Cisco MDS 9396T High-Density 32G</td>
+                      <td><span class="status-badge healthy">4 Paths Nominal</span></td>
+                      <td><span class="status-badge healthy">4 Paths Nominal</span></td>
+                      <td><strong style="color:#34d399">100% Redundant</strong></td>
                     </tr>
                     <tr>
-                      <td style="color:#00f2fe;font-weight:600;">Edge-SAN-SW-04B</td>
-                      <td>Fabric B</td>
-                      <td>Edge-SAN-SW-05 (Fixed-Port 32G FC)</td>
-                      <td>Direct REST</td>
-                      <td><span class="status-badge healthy">100% Nominal</span></td>
-                      <td><span class="status-badge healthy">TX: -2.0 / RX: -2.2 dBm</span></td>
-                      <td><strong style="color:#34d399">100%</strong></td>
+                      <td style="color:#00f2fe;font-weight:600;">Enterprise Analytics &amp; Lake</td>
+                      <td>3 Clusters</td>
+                      <td>srv-lake-wrk01, srv-lake-olap01, srv-lake-ing01</td>
+                      <td>Heterogeneous SNMP Forwarding SAN Switches</td>
+                      <td><span class="status-badge healthy">6 Paths Nominal</span></td>
+                      <td><span class="status-badge healthy">6 Paths Nominal</span></td>
+                      <td><strong style="color:#34d399">100% Redundant</strong></td>
                     </tr>
                   </tbody>
                 </table>
               </div>
             </div>
 
-            <!-- Pane 2: Port Metrics & Optics -->
+            <!-- Pane 2: App-to-Path Mapping & Redundancy -->
             <div id="tab-optics" class="mockup-tab-pane" style="display: none;">
               <div class="telemetry-table-container">
                 <table class="telemetry-table">
                   <thead>
                     <tr>
-                      <th>Port ID</th>
-                      <th>Alias / WWPN</th>
-                      <th>Speed</th>
-                      <th>TX Optical Power</th>
-                      <th>RX Optical Power</th>
-                      <th>Laser Temp</th>
-                      <th>CRC / Bit Errors</th>
-                      <th>Diagnostic Status</th>
+                      <th>Application</th>
+                      <th>Server Cluster</th>
+                      <th>Hostname</th>
+                      <th>SAN Switch &amp; Vendor</th>
+                      <th>Hardware Port</th>
+                      <th>Fabric</th>
+                      <th>Port Speed</th>
+                      <th>Path Status</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
-                      <td>fc1/14 (Core-01A)</td>
-                      <td>NVMe-Target-Port-01</td>
-                      <td>64 Gbps</td>
-                      <td>-1.85 dBm</td>
-                      <td>-2.12 dBm</td>
-                      <td>38.2°C</td>
-                      <td>0 / 0</td>
-                      <td><span class="status-badge healthy">Normal DOM</span></td>
+                      <td style="color:#00f2fe;font-weight:600;">Core Banking (CBS)</td>
+                      <td>CBS DB Failover Cluster</td>
+                      <td>srv-cbs-db01.dc1.prod</td>
+                      <td>Core-MDS-9710-1A (Cisco MDS)</td>
+                      <td>Slot 2 / Port 8</td>
+                      <td>Fabric A</td>
+                      <td>32 Gbps FC</td>
+                      <td><span class="status-badge healthy">Online (Nominal)</span></td>
                     </tr>
                     <tr>
-                      <td>fc1/18 (Edge-04A)</td>
-                      <td>DB-Cluster-HBA-02</td>
-                      <td>32 Gbps</td>
-                      <td>-2.10 dBm</td>
-                      <td style="color:#fbbf24;font-weight:bold;">-6.42 dBm (Marginal)</td>
-                      <td>44.8°C</td>
-                      <td style="color:#fbbf24">14 CRC / hr</td>
-                      <td><span class="status-badge degraded">Check Patch Cable</span></td>
+                      <td style="color:#00f2fe;font-weight:600;">Core Banking (CBS)</td>
+                      <td>CBS DB Failover Cluster</td>
+                      <td>srv-cbs-db01.dc1.prod</td>
+                      <td>Core-MDS-9710-1A (Cisco MDS)</td>
+                      <td>Slot 2 / Port 9</td>
+                      <td>Fabric A</td>
+                      <td>32 Gbps FC</td>
+                      <td><span class="status-badge healthy">Online (Nominal)</span></td>
                     </tr>
                     <tr>
-                      <td>fc2/01 (Core-01B)</td>
-                      <td>ISL-Trunk-Link-01</td>
-                      <td>128G Trunk</td>
-                      <td>-1.74 dBm</td>
-                      <td>-1.92 dBm</td>
-                      <td>36.5°C</td>
-                      <td>0 / 0</td>
-                      <td><span class="status-badge healthy">ISL Healthy</span></td>
+                      <td style="color:#00f2fe;font-weight:600;">Core Banking (CBS)</td>
+                      <td>CBS DB Failover Cluster</td>
+                      <td>srv-cbs-db01.dc1.prod</td>
+                      <td>Core-Brocade-X7-1B (Brocade X7)</td>
+                      <td>Slot 4 / Port 11</td>
+                      <td>Fabric B</td>
+                      <td>32 Gbps FC</td>
+                      <td><span class="status-badge healthy">Online (Nominal)</span></td>
+                    </tr>
+                    <tr>
+                      <td style="color:#00f2fe;font-weight:600;">Core Banking (CBS)</td>
+                      <td>CBS DB Failover Cluster</td>
+                      <td>srv-cbs-db01.dc1.prod</td>
+                      <td>Core-Brocade-X7-1B (Brocade X7)</td>
+                      <td>Slot 4 / Port 12</td>
+                      <td>Fabric B</td>
+                      <td>32 Gbps FC</td>
+                      <td><span class="status-badge healthy" id="tab-optics-p4-badge">Online (Slot X Port Y Dedicated)</span></td>
+                    </tr>
+                    <tr>
+                      <td style="color:#00f2fe;font-weight:600;">Payment Gateway</td>
+                      <td>Payment Routing Cluster</td>
+                      <td>srv-pg-rt01.dc1.prod</td>
+                      <td>Edge-Brocade-G620-1A (Brocade)</td>
+                      <td>Slot 1 / Port 1</td>
+                      <td>Fabric A</td>
+                      <td>32 Gbps FC</td>
+                      <td><span class="status-badge healthy">Online (Nominal)</span></td>
+                    </tr>
+                    <tr>
+                      <td style="color:#00f2fe;font-weight:600;">Payment Gateway</td>
+                      <td>Payment Routing Cluster</td>
+                      <td>srv-pg-rt01.dc1.prod</td>
+                      <td>Edge-Brocade-G620-1B (Brocade)</td>
+                      <td>Slot 1 / Port 2</td>
+                      <td>Fabric B</td>
+                      <td>32 Gbps FC</td>
+                      <td><span class="status-badge healthy">Online (Nominal)</span></td>
+                    </tr>
+                    <tr>
+                      <td style="color:#00f2fe;font-weight:600;">Treasury &amp; FX</td>
+                      <td>FX Matching Engine</td>
+                      <td>srv-fx-node01.dc1.prod</td>
+                      <td>Edge-MDS-9396T-2A (Cisco MDS)</td>
+                      <td>Slot 1 / Port 12</td>
+                      <td>Fabric A</td>
+                      <td>32 Gbps FC</td>
+                      <td><span class="status-badge healthy">Online (Nominal)</span></td>
+                    </tr>
+                    <tr>
+                      <td style="color:#00f2fe;font-weight:600;">Enterprise Lake</td>
+                      <td>Spark Distributed Cluster</td>
+                      <td>srv-lake-wrk01.dc1.prod</td>
+                      <td>MultiVendor-SAN-Core1 (SNMP)</td>
+                      <td>Slot 3 / Port 1</td>
+                      <td>Fabric A</td>
+                      <td>32 Gbps FC</td>
+                      <td><span class="status-badge healthy">Online (Nominal)</span></td>
                     </tr>
                   </tbody>
                 </table>
               </div>
             </div>
 
-            <!-- Pane 3: Switch Inventory -->
+            <!-- Pane 3: Switch Compatibility (Cisco, Brocade & SNMP Forwarding) -->
             <div id="tab-switches" class="mockup-tab-pane" style="display: none;">
               <div class="telemetry-table-container">
                 <table class="telemetry-table">
                   <thead>
                     <tr>
                       <th>Switch Name</th>
-                      <th>IP Address</th>
-                      <th>Role</th>
-                      <th>Firmware</th>
+                      <th>Vendor &amp; Model Architecture</th>
+                      <th>Role &amp; Fabric</th>
+                      <th>SNMP Forwarding &amp; Trap Mode</th>
                       <th>Total Ports</th>
-                      <th>Active Logins</th>
-                      <th>Direct Polling Latency</th>
+                      <th>Correlated Server Clusters</th>
+                      <th>Telemetry Status</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
-                      <td>Core-Director-01A</td>
-                      <td>10.140.12.11</td>
+                      <td style="color:#00f2fe;font-weight:600;">Core-MDS-9710-1A</td>
+                      <td>Cisco MDS 9710 Enterprise Director</td>
                       <td>Fabric A Core Director</td>
-                      <td>Firmware v9.2.1a</td>
-                      <td>256 Ports</td>
-                      <td>184 FLOGI</td>
-                      <td style="color:#34d399">18 ms</td>
+                      <td>SNMPv3 Traps &amp; Streaming (ciscoPortStateChange)</td>
+                      <td>384 Ports</td>
+                      <td>CBS Core, CBS DB, FX Engine</td>
+                      <td><span class="status-badge healthy">16 ms Latency</span></td>
                     </tr>
                     <tr>
-                      <td>Core-Director-01B</td>
-                      <td>10.140.12.12</td>
+                      <td style="color:#00f2fe;font-weight:600;">Core-Brocade-X7-1B</td>
+                      <td>Brocade X7 Gen 7 Director</td>
                       <td>Fabric B Core Director</td>
-                      <td>Firmware v9.3(2)</td>
-                      <td>256 Ports</td>
-                      <td>180 FLOGI</td>
-                      <td style="color:#34d399">22 ms</td>
+                      <td>SW-MIB / FA-MIB Traps (swFCPortScn)</td>
+                      <td>384 Ports</td>
+                      <td>CBS Core, CBS DB, Payment Routing</td>
+                      <td><span class="status-badge healthy">14 ms Latency</span></td>
+                    </tr>
+                    <tr>
+                      <td style="color:#00f2fe;font-weight:600;">Edge-MDS-9396T-2A</td>
+                      <td>Cisco MDS 9396T High-Density FC</td>
+                      <td>Fabric A Edge Switch</td>
+                      <td>SNMP Forwarding &amp; Link Traps</td>
+                      <td>96 Ports</td>
+                      <td>Treasury FX, Risk Calculation</td>
+                      <td><span class="status-badge healthy">18 ms Latency</span></td>
+                    </tr>
+                    <tr>
+                      <td style="color:#00f2fe;font-weight:600;">Edge-Brocade-G620-2B</td>
+                      <td>Brocade G620 Fixed-Port FC</td>
+                      <td>Fabric B Edge Switch</td>
+                      <td>MAPS SNMP Forwarding</td>
+                      <td>64 Ports</td>
+                      <td>Payment Routing, Settlement Ledger</td>
+                      <td><span class="status-badge healthy">15 ms Latency</span></td>
+                    </tr>
+                    <tr>
+                      <td style="color:#00f2fe;font-weight:600;">MultiVendor-SAN-Core1</td>
+                      <td>Universal SAN Switch</td>
+                      <td>Heterogeneous DC Fabric</td>
+                      <td>Standard RFC 1157 SNMP Trap Forwarding</td>
+                      <td>48 Ports</td>
+                      <td>Spark Analytics, Ingestion Nodes</td>
+                      <td><span class="status-badge healthy">19 ms Latency</span></td>
                     </tr>
                   </tbody>
                 </table>
               </div>
             </div>
 
-            <!-- Pane 4: Congestion Alarms -->
+            <!-- Pane 4: SNMP Traps & Red Slice Alerts -->
             <div id="tab-congestion" class="mockup-tab-pane" style="display: none;">
-              <div style="background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 6px; padding: 1.25rem; font-family: var(--font-mono); font-size: 0.8rem;">
-                <div style="color: #fbbf24; font-weight: bold; margin-bottom: 0.5rem;">[ALERT INF-B2B-104]: Zero-Credit State Detected on Edge-SAN-SW-04A, Port 14</div>
+              <div style="background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.35); border-radius: 6px; padding: 1.25rem; font-family: var(--font-mono); font-size: 0.8rem; margin-bottom: 1rem;">
+                <div style="color: #f87171; font-weight: bold; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                  <span class="appwise-path-dot down"></span>
+                  <span>[SNMP TRAP / swFCPortScn]: Switch Port State Change Event Ingested</span>
+                </div>
+                <div style="color: #cbd5e1; line-height: 1.6;">
+                  • <strong>Hardware Trigger:</strong> SNMP Trap forwarded from <code>Core-Brocade-X7-1B</code>: <code>swFCPortScn (Offline)</code> on <strong>Slot 4, Port 12</strong>.<br>
+                  • <strong>App-Wise Correlation:</strong> Normalized to <code>Core Banking Engine (CBS)</code> › <code>CBS DB Failover Cluster</code> › <code>srv-cbs-db01.dc1.prod</code>.<br>
+                  • <strong>Visual Red Slice Action:</strong> In the hostname view, the dedicated slice for Slot 4 Port 12 instantly turns <strong style="color:#ef4444;">RED</strong>.<br>
+                  • <strong>Dual-Fabric Redundancy:</strong> Fabric A path (Cisco MDS 9710 Slot 2 Port 8) continues forwarding I/O with zero application impact.
+                </div>
+              </div>
+
+              <div style="background: rgba(56, 189, 248, 0.06); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 6px; padding: 1.25rem; font-family: var(--font-mono); font-size: 0.8rem; margin-bottom: 1rem;">
+                <div style="color: var(--cyan-400); font-weight: bold; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                  <span class="appwise-path-dot online"></span>
+                  <span>[SNMP TRAP / ciscoPortStateChange]: Cisco MDS Link State Telemetry</span>
+                </div>
+                <div style="color: #cbd5e1; line-height: 1.6;">
+                  • <strong>Hardware Trigger:</strong> SNMPv3 trap forwarding from <code>Core-MDS-9710-1A</code> (Fabric A) on <strong>Slot 2, Port 8</strong>.<br>
+                  • <strong>App-Wise Correlation:</strong> Correlated to <code>srv-cbs-db01.dc1.prod</code> dedicated Fabric A primary path.<br>
+                  • <strong>Red Slice Mechanism:</strong> If Cisco switch reports Slot 2 Port 8 down, that dedicated slice turns red within sub-second latency.
+                </div>
+              </div>
+
+              <div style="background: rgba(16, 185, 129, 0.06); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 6px; padding: 1.25rem; font-family: var(--font-mono); font-size: 0.8rem;">
+                <div style="color: #34d399; font-weight: bold; margin-bottom: 0.5rem;">[UNIVERSAL COMPATIBILITY]: Cisco, Brocade &amp; Any SNMP Forwarding Switch</div>
                 <div style="color: #94a3b8; line-height: 1.6;">
-                  • <strong>Cause:</strong> Initiator WWPN <code>21:00:00:24:ff:58:12:a4</code> returned 0 credits for > 15ms intervals.<br>
-                  • <strong>Impact:</strong> Class 3 frames queued; potential backpressure on ISL trunk 2.<br>
-                  • <strong>Deterministic Remediation Guide:</strong> Inspect initiator queue depth or replace patch cord on SFP transceiver port 14.
+                  Infrasights requires zero host agents. Any data center Fibre Channel switch capable of standard SNMP trap forwarding (RFC 1157, RFC 2576, SW-MIB, FA-MIB, Cisco CISCO-FC-FE-MIB) integrates out of the box with zero configuration changes to your storage fabrics.
                 </div>
               </div>
             </div>
@@ -864,9 +1173,9 @@
         <div class="audience-grid">
           <div class="audience-card">
             <div class="persona-tag">Technical Evaluator</div>
-            <h3 class="persona-title">SAN & Storage Administrators</h3>
+            <h3 class="persona-title">SAN &amp; Storage Administrators</h3>
             <p class="persona-desc">
-              Understand data collection directly from switches, eliminate manual CLI scraping, and identify faulty SFP optics and buffer credit drops before storage LUNs experience I/O pauses.
+              Eliminate manual switch-by-switch CLI scraping across Cisco and Brocade fabrics. When an SNMP trap signals slot X port Y down, immediately see which business application and server cluster is impacted with instant red slice clarity.
             </p>
           </div>
 
@@ -874,15 +1183,15 @@
             <div class="persona-tag">Operational Owner</div>
             <h3 class="persona-title">Infrastructure Operations Managers</h3>
             <p class="persona-desc">
-              Gain a unified operational picture across multi-vendor fabrics. Standardize day-to-day SAN monitoring and reduce dependence on a few senior specialists for routine triage.
+              Gain a unified one-view dashboard mapping complex DC structure SAN paths App-wise. Multi-level pie charts deliver instant drill-down from business applications to server clusters down to host SAN paths.
             </p>
           </div>
 
           <div class="audience-card">
             <div class="persona-tag">Business Approver</div>
-            <h3 class="persona-title">IT Directors & Infrastructure Heads</h3>
+            <h3 class="persona-title">IT Directors &amp; Infrastructure Heads</h3>
             <p class="persona-desc">
-              Protect mission-critical storage reliability, eliminate costly proprietary management appliances, and establish a clear, secure on-premises deployment posture.
+              Eliminate blind spots in enterprise Fibre Channel fabrics. Universal compatibility with Cisco MDS, Brocade (Broadcom), and any SNMP-forwarding SAN switches ensures end-to-end multi-path redundancy.
             </p>
           </div>
         </div>
@@ -978,7 +1287,31 @@
             </button>
             <div class="faq-answer">
               <div class="faq-content">
-                Infrasights supports modern enterprise Fibre Channel director and edge switches across all leading multi-vendor platforms. Support includes 16G, 32G, and 64G FC optics, modular blades, and high-speed ISL trunks.
+                Infrasights is natively compatible with Cisco MDS director and fabric switches, Brocade (Broadcom) enterprise fabrics, and any enterprise Fibre Channel switches with SNMP forwarding. Telemetry is collected directly via SNMP trap forwarding (SW-MIB, FA-MIB, MAPS) and secure REST APIs.
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>How does Infrasights map complex DC SAN paths App-wise?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <div class="faq-content">
+                Infrasights bridges the gap between business applications and physical storage fabrics through a 3-tier topology hierarchy. The home dashboard features app cards with pie charts where every slice is a server cluster; clicking an app reveals cluster pies; clicking a cluster opens the hostname view where every pie slice represents a dedicated physical SAN path.
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>What happens when a switch reports that slot X port Y is down?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <div class="faq-content">
+                When a Cisco, Brocade, or SNMP-enabled switch detects a link failure and emits an SNMP trap for slot X port Y, Infrasights ingests the trap, correlates the hardware port to its associated hostname and server cluster, and instantly turns the dedicated SAN path slice red in the dashboard, notifying operations teams immediately.
               </div>
             </div>
           </div>
@@ -1056,26 +1389,26 @@
             <span class="brand-badge">v2.10</span>
           </div>
           <p class="footer-desc">
-            A centralized visibility and monitoring platform for SAN infrastructure. Direct Fibre Channel switch telemetry for enterprise operations teams.
+            One-view dashboard of complex DC structure SAN paths App-wise. Multi-level pie charts and real-time SNMP forwarding alerts for Cisco, Brocade, and enterprise SAN fabrics.
           </p>
         </div>
 
         <div>
           <h4 class="footer-col-title">Platform</h4>
           <ul class="footer-links">
-            <li><a href="#capabilities" class="footer-link">Direct Collection</a></li>
-            <li><a href="#capabilities" class="footer-link">B2B Credit Analysis</a></li>
-            <li><a href="#capabilities" class="footer-link">SFP Optics Monitoring</a></li>
-            <li><a href="#capabilities" class="footer-link">Error Correlation</a></li>
+            <li><a href="#capabilities" class="footer-link">App-Wise SAN Mapping</a></li>
+            <li><a href="#capabilities" class="footer-link">3-Tier Multi-Level Pies</a></li>
+            <li><a href="#interface" class="footer-link">Slot X Port Y Red Slices</a></li>
+            <li><a href="#capabilities" class="footer-link">Cisco &amp; Brocade Support</a></li>
           </ul>
         </div>
 
         <div>
           <h4 class="footer-col-title">Architecture</h4>
           <ul class="footer-links">
-            <li><a href="#architecture" class="footer-link">Data Pipeline</a></li>
-            <li><a href="#comparison" class="footer-link">Agentless Direct Design</a></li>
-            <li><a href="#deployment" class="footer-link">Deployment Model</a></li>
+            <li><a href="#architecture" class="footer-link">SNMP Trap Pipeline</a></li>
+            <li><a href="#architecture" class="footer-link">App-to-Path Correlation</a></li>
+            <li><a href="#capabilities" class="footer-link">Dual-Fabric Redundancy</a></li>
             <li><a href="#faq" class="footer-link">Technical FAQ</a></li>
           </ul>
         </div>
@@ -1336,10 +1669,11 @@
               <div class="form-group" style="margin-bottom: 0.75rem;">
                 <label class="form-label" for="dept-vendor">Primary SAN Switch Architecture *</label>
                 <select id="dept-vendor" class="form-select">
-                  <option value="Enterprise Core Directors">Enterprise Core Directors</option>
-                  <option value="Modular Edge Fabric Switches">Modular Edge Fabric Switches</option>
-                  <option value="Heterogeneous Multi-Vendor Fabric" selected>Heterogeneous Multi-Vendor Fabric</option>
-                  <option value="Standard Fibre Channel Architecture">Standard Fibre Channel Architecture</option>
+                  <option value="Cisco MDS SAN Switches">Cisco MDS SAN Switches</option>
+                  <option value="Brocade Enterprise Fabric Switches">Brocade Enterprise Fabric Switches</option>
+                  <option value="Heterogeneous Cisco & Brocade SAN" selected>Heterogeneous Cisco &amp; Brocade SAN</option>
+                  <option value="Multi-Vendor SAN with SNMP Forwarding">Multi-Vendor SAN with SNMP Forwarding</option>
+                  <option value="Standard Fibre Channel Architecture">Other Fibre Channel Architecture</option>
                 </select>
               </div>
               <div class="form-group" style="margin-bottom: 0.75rem;">
@@ -1364,7 +1698,7 @@
               </div>
               <div class="form-group" style="margin-bottom: 0.75rem;">
                 <label class="form-label" for="dept-models">Switch Models (If Known)</label>
-                <input type="text" id="dept-models" class="form-input" placeholder="e.g. Enterprise Core Director, High-Density 32G/64G Switch">
+                <input type="text" id="dept-models" class="form-input" placeholder="e.g. Cisco MDS 9710 / 9396T, Brocade X7 / G620, SNMP forwarding switches">
               </div>
             </div>
 
@@ -1397,7 +1731,7 @@
 
             <div class="form-group" style="margin-bottom: 0.75rem;">
               <label class="form-label" for="dept-notes">Key Operational Challenges or Objectives</label>
-              <textarea id="dept-notes" class="form-textarea" rows="3" placeholder="e.g. Frequent slow-drain troubleshooting, eliminating intermediary management proxies, monitoring SFP optical health..."></textarea>
+              <textarea id="dept-notes" class="form-textarea" rows="3" placeholder="e.g. Complex DC SAN path mapping app-wise, real-time switch slot X port Y down SNMP trap alerting, Cisco & Brocade dual-fabric redundancy..."></textarea>
             </div>
           </div>
 
