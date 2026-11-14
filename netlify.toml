@@ -6,6 +6,8 @@
 [build]
   # Publish directory containing index.html, assets, css, js, sitemap.xml, robots.txt
   publish = "."
+  # Netlify Serverless Functions directory
+  functions = "netlify/functions"
   # Lightweight verification build command
   command = "npm run build"
 
@@ -93,14 +95,14 @@
   force = true
 
 # ==============================================================================
-# API Reverse Proxy (Routes /api requests to Infrasights backend service)
-# If using Render.com backend (defined in render.yaml):
+# Netlify Serverless Functions API Routing
+# Directs /api/* requests directly to the serverless function handler
 # ==============================================================================
 [[redirects]]
   from = "/api/*"
-  to = "https://infrasights-platform.onrender.com/api/:splat"
+  to = "/.netlify/functions/api/:splat"
   status = 200
-  force = false
+  force = true
 
 # ==============================================================================
 # SPA Routing Fallback

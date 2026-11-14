@@ -24,6 +24,12 @@ class DatabaseManager {
     return this.initPromise;
   }
 
+  async _ensureReady() {
+    if (!this.pool && !this.isFallback) {
+      await this.init();
+    }
+  }
+
   async _connect() {
     const config = {
       user: process.env.MSSQL_USER || 'sa',
@@ -83,6 +89,7 @@ class DatabaseManager {
 
   async findUserByEmail(email) {
     if (!email) return null;
+    await this._ensureReady();
     const normalized = String(email).trim().toLowerCase();
 
     if (this.isFallback) {
@@ -101,6 +108,7 @@ class DatabaseManager {
 
   async findUserById(id) {
     if (!id) return null;
+    await this._ensureReady();
 
     if (this.isFallback) {
       return dbFallback.findUserById(id);
@@ -117,6 +125,7 @@ class DatabaseManager {
   }
 
   async createUser({ email, password_hash, full_name, organization, department_role, phone_number = null, phone_verified = 0 }) {
+    await this._ensureReady();
     const normalizedEmail = String(email).trim().toLowerCase();
 
     if (this.isFallback) {
@@ -150,6 +159,7 @@ class DatabaseManager {
   }
 
   async createSession({ user_id, token_hash, ip_address = null, user_agent = null, expires_at }) {
+    await this._ensureReady();
     if (this.isFallback) {
       return dbFallback.createSession({ user_id, token_hash, ip_address, user_agent, expires_at });
     }
@@ -221,6 +231,7 @@ class DatabaseManager {
     qualification_payload_json = null,
     status = 'PENDING_REVIEW'
   }) {
+    await this._ensureReady();
     if (this.isFallback) {
       return dbFallback.createDeploymentRequest({
         tracking_ref,
