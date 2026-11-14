@@ -209,7 +209,8 @@ async function createDeployment(req, res) {
         fabricCount: fabrics,
         deploymentModel: model,
         timeline: time,
-        notes: opNotes
+        notes: opNotes,
+        contactPhone: phone || null
       });
     } catch (emailErr) {
       console.warn('[DeploymentController] Email dispatch warning:', emailErr.message);

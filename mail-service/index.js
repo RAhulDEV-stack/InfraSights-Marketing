@@ -11,6 +11,13 @@ const express = require('express');
 const cors = require('cors');
 const crypto = require('crypto');
 
+let nodemailer;
+try {
+  nodemailer = require('nodemailer');
+} catch (e) {
+  nodemailer = null;
+}
+
 const app = express();
 const PORT = parseInt(process.env.PORT || '4000', 10);
 const SERVICE_NAME = 'infrasights-mail-service';
@@ -47,6 +54,8 @@ function generateMessageId() {
 
 /**
  * Core transactional email dispatcher
+ * Transmits live emails via Resend HTTP API or Nodemailer SMTP when configured,
+ * and maintains resilient outbox logging.
  */
 async function dispatchEmail({ to, subject, html, text, type = 'TRANSACTIONAL', metadata = {} }) {
   const recipient = String(to || '').trim().toLowerCase();
@@ -60,17 +69,94 @@ async function dispatchEmail({ to, subject, html, text, type = 'TRANSACTIONAL', 
 
   const messageId = generateMessageId();
   const timestamp = new Date().toISOString();
+  const fromEmail = process.env.FROM_EMAIL || 'admin@infrasights.in';
+
+  let liveDelivered = false;
+  let deliveryMethod = 'LOCAL_OUTBOX';
+  let deliveryError = null;
+
+  // 1. Resend API Dispatch (Ideal for Serverless Functions)
+  if (process.env.RESEND_API_KEY) {
+    try {
+      const resendRes = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          from: process.env.RESEND_FROM || `Infrasights <${fromEmail}>`,
+          to: [recipient],
+          subject: subject.trim(),
+          html: html || `<p>${text || subject}</p>`,
+          text: text || subject
+        })
+      });
+      const data = await resendRes.json();
+      if (resendRes.ok) {
+        liveDelivered = true;
+        deliveryMethod = `RESEND (${data.id || 'OK'})`;
+        console.log(`[MailService] Live email delivered via Resend to ${recipient}: ${data.id}`);
+      } else {
+        deliveryError = data.message || JSON.stringify(data);
+        console.warn(`[MailService] Resend API notice:`, data);
+      }
+    } catch (resendErr) {
+      deliveryError = resendErr.message;
+      console.warn(`[MailService] Resend API exception:`, resendErr.message);
+    }
+  }
+
+  // 2. Direct SMTP Transport via Nodemailer (GoDaddy, Google Workspace, AWS SES, Brevo)
+  if (!liveDelivered && nodemailer && (process.env.SMTP_USER || process.env.SMTP_HOST)) {
+    try {
+      const port = parseInt(process.env.SMTP_PORT || '465', 10);
+      const isSecure = (process.env.SMTP_SECURE === 'true') || port === 465;
+
+      const transporter = nodemailer.createTransport({
+        host: process.env.SMTP_HOST || 'smtpout.secureserver.net',
+        port: port,
+        secure: isSecure,
+        auth: {
+          user: process.env.SMTP_USER || 'admin@infrasights.in',
+          pass: process.env.SMTP_PASS || process.env.SMTP_PASSWORD
+        },
+        tls: {
+          rejectUnauthorized: process.env.SMTP_IGNORE_TLS !== 'true'
+        },
+        connectionTimeout: 8000,
+        greetingTimeout: 8000
+      });
+
+      const info = await transporter.sendMail({
+        from: `"Infrasights Operations" <${fromEmail}>`,
+        to: recipient,
+        subject: subject.trim(),
+        text: text || subject,
+        html: html || `<p>${text || subject}</p>`
+      });
+
+      liveDelivered = true;
+      deliveryMethod = `SMTP (${info.messageId || 'OK'})`;
+      console.log(`[MailService] Live email delivered via SMTP to ${recipient}: ${info.messageId}`);
+    } catch (smtpErr) {
+      deliveryError = smtpErr.message;
+      console.warn(`[MailService] SMTP transmission notice (${smtpErr.message}). Recorded to transactional outbox.`);
+    }
+  }
 
   const record = {
     messageId,
     type,
     to: recipient,
-    from: process.env.FROM_EMAIL || 'admin@infrasights.in',
+    from: fromEmail,
     subject: subject.trim(),
     html: html || `<p>${text || subject}</p>`,
     text: text || subject,
     metadata,
-    status: 'DISPATCHED',
+    status: liveDelivered ? 'DELIVERED' : 'DISPATCHED',
+    deliveryMethod,
+    deliveryError,
     timestamp
   };
 
@@ -80,7 +166,7 @@ async function dispatchEmail({ to, subject, html, text, type = 'TRANSACTIONAL', 
     emailOutbox.pop();
   }
 
-  console.log(`[MailService] ${type} email dispatched to ${recipient} (Subject: "${subject}", ID: ${messageId})`);
+  console.log(`[MailService] ${type} email registered for ${recipient} (Subject: "${subject}", ID: ${messageId}, Status: ${record.status}, Delivery: ${deliveryMethod})`);
 
   return record;
 }

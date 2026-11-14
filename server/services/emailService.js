@@ -101,19 +101,91 @@ async function sendDeploymentQualificationEmails(qualificationData) {
     try {
       const ref = trackingRef;
       const recipient = businessEmail;
-      const org = organizationName;
+      const org = organizationName || 'Enterprise Storage';
+      const role = qualificationData.departmentRole || 'SAN Team';
+      const region = qualificationData.countryRegion || 'Not specified';
+      const vendor = qualificationData.sanVendor || 'Multi-Vendor Fibre Channel';
+      const switches = qualificationData.switchCount || '10-25';
+      const fabrics = qualificationData.fabricCount || 'Dual Fabric A/B';
+      const model = qualificationData.deploymentModel || 'Virtual Appliance (VMware/KVM)';
+      const time = qualificationData.timeline || 'Immediate';
+      const opNotes = qualificationData.notes || 'None';
+      const phone = qualificationData.contactPhone || 'Not provided';
       const adminEmail = process.env.ADMIN_NOTIFICATION_EMAIL || 'admin@infrasights.in';
 
+      // Branded User Confirmation Email HTML
       const userSubject = `Infrasights v2.10 Deployment Qualification Received [${ref}]`;
+      const userHtml = `
+        <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #070b14; color: #f1f5f9; padding: 24px; margin: 0;">
+          <div style="max-width: 600px; margin: 0 auto; background: #0c1322; border: 1px solid rgba(0, 242, 254, 0.3); border-radius: 8px; padding: 32px;">
+            <div style="border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 16px; margin-bottom: 24px;">
+              <span style="font-size: 22px; font-weight: 700; color: #00f2fe; letter-spacing: -0.5px;">Infrasights</span>
+              <span style="display: inline-block; background: rgba(0,242,254,0.15); color: #00f2fe; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; margin-left: 8px;">v2.10</span>
+            </div>
+            <h2 style="color: #ffffff; font-size: 20px; margin-top: 0;">Deployment Qualification Confirmation</h2>
+            <p style="color: #cbd5e1; line-height: 1.6;">
+              Thank you for requesting an Infrasights v2.10 enterprise deployment for <strong>${org}</strong>.
+              Your technical parameters have been registered under reference:
+            </p>
+            <div style="background: rgba(0, 242, 254, 0.08); border: 1px solid rgba(0, 242, 254, 0.3); border-radius: 6px; padding: 16px; margin: 20px 0; text-align: center;">
+              <div style="font-size: 12px; text-transform: uppercase; color: #94a3b8; margin-bottom: 4px;">Tracking Reference</div>
+              <div style="font-family: monospace; font-size: 24px; font-weight: 700; color: #00f2fe; letter-spacing: 1px;">${ref}</div>
+            </div>
+            <table style="width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 14px;">
+              <tr><td style="padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.06); color: #94a3b8; width: 40%;">Organization:</td><td style="padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.06); color: #f8fafc; font-weight: 600;">${org} (${region})</td></tr>
+              <tr><td style="padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.06); color: #94a3b8;">Contact:</td><td style="padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.06); color: #f8fafc; font-weight: 600;">${recipient} [${role}]</td></tr>
+              <tr><td style="padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.06); color: #94a3b8;">SAN Architecture:</td><td style="padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.06); color: #f8fafc; font-weight: 600;">${vendor}</td></tr>
+              <tr><td style="padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.06); color: #94a3b8;">Switch Scope:</td><td style="padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.06); color: #f8fafc; font-weight: 600;">${switches} (${fabrics})</td></tr>
+              <tr><td style="padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.06); color: #94a3b8;">Appliance Target:</td><td style="padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.06); color: #f8fafc; font-weight: 600;">${model}</td></tr>
+              <tr><td style="padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.06); color: #94a3b8;">Timeline:</td><td style="padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.06); color: #f8fafc; font-weight: 600;">${time}</td></tr>
+            </table>
+            <p style="color: #cbd5e1; line-height: 1.6;">
+              <strong>Next Steps:</strong> An Infrasights systems engineer will review your connectivity parameters and schedule a verification walkthrough.
+            </p>
+            <div style="margin-top: 32px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 16px; font-size: 12px; color: #64748b;">
+              Infrasights v2.10 — Direct Switch Telemetry • Zero Agent Footprint • admin@infrasights.in
+            </div>
+          </div>
+        </div>
+      `;
       const userText = `Thank you for requesting an Infrasights v2.10 enterprise deployment for ${org}. Tracking Reference: ${ref}. Our SAN infrastructure team will review your parameters.`;
 
-      const adminSubject = `[DEPLOYMENT QUALIFICATION] ${ref} - ${org}`;
-      const adminText = `New deployment qualification submitted. Tracking Reference: ${ref}. Org: ${org}. Contact: ${recipient}.`;
+      // Detailed Admin Notification Email HTML (to admin@infrasights.in)
+      const adminSubject = `[DEPLOYMENT QUALIFICATION] ${ref} - ${org} (${switches})`;
+      const adminHtml = `
+        <div style="font-family: Arial, sans-serif; padding: 20px; background: #f8fafc; color: #1e293b;">
+          <div style="max-width: 600px; background: #fff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 24px;">
+            <div style="background: #0c1322; color: #00f2fe; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+              <h2 style="margin: 0; font-size: 18px; color: #00f2fe;">New Deployment Qualification Request</h2>
+            </div>
+            <p><strong>Tracking Reference:</strong> <code style="background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-size: 16px; color: #0284c7;">${ref}</code></p>
+            <p><strong>Organization:</strong> ${org}</p>
+            <p><strong>Requester Email:</strong> <a href="mailto:${recipient}">${recipient}</a></p>
+            <p><strong>Contact Phone:</strong> ${phone}</p>
+            <p><strong>Role / Team:</strong> ${role}</p>
+            <p><strong>Region:</strong> ${region}</p>
+            <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 16px 0;">
+            <h4 style="margin: 0 0 8px 0; color: #0f172a;">Infrastructure Scope:</h4>
+            <ul style="line-height: 1.8; padding-left: 20px;">
+              <li><strong>Switch Architecture:</strong> ${vendor}</li>
+              <li><strong>Switch Count:</strong> ${switches}</li>
+              <li><strong>Fabric Topology:</strong> ${fabrics}</li>
+              <li><strong>Target Appliance:</strong> ${model}</li>
+              <li><strong>Timeline:</strong> ${time}</li>
+            </ul>
+            ${opNotes !== 'None' ? `<p><strong>Operational Notes:</strong><br><pre style="background: #f1f5f9; padding: 8px; border-radius: 4px; font-size: 13px;">${opNotes}</pre></p>` : ''}
+            <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 16px 0;">
+            <p style="font-size: 12px; color: #64748b;">Infrasights v2.10 Automated Operations Dispatcher</p>
+          </div>
+        </div>
+      `;
+      const adminText = `New deployment qualification submitted.\nTracking Reference: ${ref}\nOrganization: ${org}\nRequester: ${recipient}\nPhone: ${phone}\nScope: ${switches} (${fabrics})\nAppliance: ${model}\nTimeline: ${time}\nNotes: ${opNotes}`;
 
       const [userEmail, adminNotification] = await Promise.all([
         localMailService.dispatchEmail({
           to: recipient,
           subject: userSubject,
+          html: userHtml,
           text: userText,
           type: 'DEPLOYMENT_CONFIRMATION',
           metadata: { trackingRef: ref, organization: org }
@@ -121,6 +193,7 @@ async function sendDeploymentQualificationEmails(qualificationData) {
         localMailService.dispatchEmail({
           to: adminEmail,
           subject: adminSubject,
+          html: adminHtml,
           text: adminText,
           type: 'DEPLOYMENT_OPS_NOTIFICATION',
           metadata: { trackingRef: ref, organization: org, requester: recipient }
