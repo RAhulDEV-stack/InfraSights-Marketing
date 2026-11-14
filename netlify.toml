@@ -1,0 +1,86 @@
+# ==============================================================================
+# Infrasights v2.10 — Netlify Production Configuration
+# Custom Domain: infrasights.in / www.infrasights.in
+# ==============================================================================
+
+[build]
+  # Publish directory containing index.html, assets, css, js, sitemap.xml, robots.txt
+  publish = "."
+  # Lightweight verification build command
+  command = "npm run build"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# ==============================================================================
+# Global Security & Transport Headers
+# ==============================================================================
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
+
+# Long-term immutable caching for static assets
+[[headers]]
+  for = "/css/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/js/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Never cache HTML to ensure instant updates on deployment
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/sitemap.xml"
+  [headers.values]
+    Cache-Control = "public, max-age=86400, must-revalidate"
+
+[[headers]]
+  for = "/robots.txt"
+  [headers.values]
+    Cache-Control = "public, max-age=86400, must-revalidate"
+
+# ==============================================================================
+# Domain Canonicalization (Redirect www to apex domain infrasights.in)
+# ==============================================================================
+[[redirects]]
+  from = "https://www.infrasights.in/*"
+  to = "https://infrasights.in/:splat"
+  status = 301
+  force = true
+
+# ==============================================================================
+# API Reverse Proxy (Routes /api requests to Infrasights backend service)
+# If using Render.com backend (defined in render.yaml):
+# ==============================================================================
+[[redirects]]
+  from = "/api/*"
+  to = "https://infrasights-platform.onrender.com/api/:splat"
+  status = 200
+  force = false
+
+# ==============================================================================
+# SPA Routing Fallback
+# Serves index.html for all non-asset client routes
+# ==============================================================================
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

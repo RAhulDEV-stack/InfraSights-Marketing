@@ -137,7 +137,22 @@ flowchart LR
 
 ---
 
-## 7. Automated Test Suite Execution
+## 7. Netlify Cloud Deployment (`infrasights.in`)
+
+The repository includes a production-ready `netlify.toml` specification for hosting on **Netlify Edge CDN** with the custom domain **`infrasights.in`**:
+
+- **Publish Directory**: `.` (Root)
+- **Custom Domains**: `infrasights.in` (Apex) and `www.infrasights.in`
+- **DNS Records**:
+  - Apex `A` Record: `@` -> `75.2.60.5`
+  - Subdomain `CNAME`: `www` -> `<site-name>.netlify.app`
+- **SSL/TLS**: Automated Let's Encrypt certificates with HSTS preloading.
+- **Reverse Proxy**: Seamlessly proxies `/api/*` requests to the active backend service without CORS complications.
+- **Detailed Step-by-Step Guide**: See [docs/NETLIFY_DEPLOYMENT_GUIDE.md](file:///D:/Infrasights_Marketing/docs/NETLIFY_DEPLOYMENT_GUIDE.md).
+
+---
+
+## 8. Automated Test Suite Execution
 
 ```powershell
 # Run backend integration tests (17 passed)
