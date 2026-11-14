@@ -135,6 +135,22 @@ Alternatively, point your domain's Nameservers (NS) to Netlify:
 
 ---
 
+### Step 5: Transactional Email Environment Variables
+
+In Netlify under **Site configuration** > **Environment variables**, configure your email delivery provider to deliver live confirmation and admin alert emails:
+
+- `SMTP_HOST`: `smtpout.secureserver.net` (GoDaddy) or your provider
+- `SMTP_PORT`: `465` (SSL)
+- `SMTP_SECURE`: `true`
+- `SMTP_USER`: `admin@infrasights.in`
+- `SMTP_PASS`: `[your-email-password]`
+- `FROM_EMAIL`: `admin@infrasights.in`
+- `ADMIN_NOTIFICATION_EMAIL`: `admin@infrasights.in`
+
+*(Alternatively, use `RESEND_API_KEY` for instant HTTP-based serverless email delivery).*
+
+---
+
 ## 4. Verification Checklist
 
 - [ ] `https://infrasights.in` loads the Infrasights v2.10 platform.
