@@ -9,6 +9,10 @@ const { requireVendorApi, requireVendorWeb } = require('../middleware/vendorAuth
 
 // API Router (/api/vendor)
 const apiRouter = express.Router();
+apiRouter.use((req, res, next) => {
+  res.set('X-Robots-Tag', 'noindex, nofollow, noarchive');
+  next();
+});
 
 // Public vendor authentication endpoints (supports both /auth/login and /login)
 apiRouter.post('/auth/login', vendorController.login);
@@ -24,6 +28,10 @@ apiRouter.get('/stats', requireVendorApi, vendorController.getStats);
 
 // Web Router (/vendor, /vendor/login)
 const webRouter = express.Router();
+webRouter.use((req, res, next) => {
+  res.set('X-Robots-Tag', 'noindex, nofollow, noarchive');
+  next();
+});
 
 webRouter.get('/vendor', requireVendorWeb, vendorController.renderDashboard);
 webRouter.get('/vendor/login', vendorController.renderLogin);

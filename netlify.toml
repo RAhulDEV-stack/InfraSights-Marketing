@@ -28,11 +28,19 @@
     Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
     X-Robots-Tag = "all"
 
-# Edge Performance: Preconnect Hints on Landing Page
+# Edge Performance & Canonical Link: Landing Page
 [[headers]]
   for = "/"
   [headers.values]
-    Link = "<https://fonts.googleapis.com>; rel=preconnect, <https://fonts.gstatic.com>; rel=preconnect; crossorigin"
+    Link = '<https://infrasights.in/>; rel="canonical", <https://fonts.googleapis.com>; rel=preconnect, <https://fonts.gstatic.com>; rel=preconnect; crossorigin'
+    X-Robots-Tag = "all, index, follow"
+
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    Link = '<https://infrasights.in/>; rel="canonical"'
+    X-Robots-Tag = "all, index, follow"
+    Cache-Control = "public, max-age=0, must-revalidate"
 
 # Long-term immutable caching for static assets
 [[headers]]
@@ -66,11 +74,37 @@
   for = "/sitemap.xml"
   [headers.values]
     Cache-Control = "public, max-age=86400, must-revalidate"
+    Content-Type = "application/xml; charset=utf-8"
+    X-Robots-Tag = "all, index, follow"
 
 [[headers]]
   for = "/robots.txt"
   [headers.values]
     Cache-Control = "public, max-age=86400, must-revalidate"
+    Content-Type = "text/plain; charset=utf-8"
+    X-Robots-Tag = "all, index, follow"
+
+[[headers]]
+  for = "/site.webmanifest"
+  [headers.values]
+    Cache-Control = "public, max-age=86400, must-revalidate"
+    Content-Type = "application/manifest+json; charset=utf-8"
+
+# Disallow indexing on internal API endpoints and vendor admin routes
+[[headers]]
+  for = "/api/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+
+[[headers]]
+  for = "/vendor/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+
+[[headers]]
+  for = "/vendor"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
 
 # ==============================================================================
 # Block Direct Access to Sensitive Server Code

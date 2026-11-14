@@ -1,10 +1,38 @@
-User-agent: *
+# ==============================================================================
+# Infrasights (https://infrasights.in) — Web Robots Directives
+# Optimized for Googlebot, Bingbot, and universal search engine indexation
+# ==============================================================================
+
+User-agent: Googlebot
 Allow: /
+Allow: /assets/
+Allow: /css/
+Allow: /js/
 Disallow: /api/
 Disallow: /vendor/
 Disallow: /server/
 Disallow: /.git/
 
-# Host Directives & Canonical Sitemap
-Host: https://infrasights.in
+User-agent: Bingbot
+Allow: /
+Allow: /assets/
+Allow: /css/
+Allow: /js/
+Disallow: /api/
+Disallow: /vendor/
+Disallow: /server/
+Disallow: /.git/
+
+User-agent: *
+Allow: /
+Allow: /assets/
+Allow: /css/
+Allow: /js/
+Disallow: /api/
+Disallow: /vendor/
+Disallow: /server/
+Disallow: /.git/
+
+# Host Directives & Canonical Sitemap (RFC compliant domain syntax)
+Host: infrasights.in
 Sitemap: https://infrasights.in/sitemap.xml

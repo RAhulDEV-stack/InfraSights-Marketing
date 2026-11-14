@@ -29,7 +29,7 @@ async function request(path, options = {}) {
 
   const contentType = response.headers.get('content-type') || '';
   let body;
-  if (contentType.includes('application/json')) {
+  if (contentType.includes('json')) {
     body = await response.json();
   } else {
     body = await response.text();
@@ -698,10 +698,13 @@ async function runTests() {
     const contentType = res.headers.get('content-type') || '';
     assert(contentType.includes('text/plain'), `Expected text/plain content-type, got ${contentType}`);
     assert(typeof res.body === 'string', 'Body must be string');
+    assert(res.body.includes('User-agent: Googlebot'), 'Must explicitly allow Googlebot');
+    assert(res.body.includes('User-agent: Bingbot'), 'Must explicitly allow Bingbot');
     assert(res.body.includes('User-agent: *'), 'Must specify User-agent: *');
     assert(res.body.includes('Allow: /'), 'Must allow root access');
     assert(res.body.includes('Disallow: /api/'), 'Must disallow /api/');
     assert(res.body.includes('Disallow: /vendor/'), 'Must disallow /vendor/');
+    assert(res.body.includes('Host: infrasights.in'), 'Must include RFC-compliant Host directive without scheme');
     assert(res.body.includes('Sitemap: https://infrasights.in/sitemap.xml'), 'Must point to production sitemap');
   });
 
@@ -719,8 +722,27 @@ async function runTests() {
     assert(res.status === 200, `Expected 200, got ${res.status}`);
     assert(typeof res.body === 'string', 'Body must be HTML string');
     
-    // Canonical link
+    // Canonical link & Title
     assert(res.body.includes('<link rel="canonical" href="https://infrasights.in/">'), 'Must have canonical link');
+    assert(res.body.includes('<title>Infrasights — Official Site | App-Wise SAN Path Monitoring & DC Infrastructure Visibility</title>'), 'Must have brand-dominant title');
+    assert(res.body.includes('Infrasights — App-Wise SAN Path Monitoring'), 'Hero H1 must lead with Infrasights brand');
+
+    // Google Verification & Geo/Language
+    assert(res.body.includes('<meta name="google-site-verification"'), 'Must have google site verification meta tag');
+    assert(res.body.includes('<link rel="alternate" hreflang="en"'), 'Must have hreflang en link');
+    assert(res.body.includes('<link rel="alternate" hreflang="x-default"'), 'Must have hreflang x-default link');
+    assert(res.body.includes('<link rel="manifest" href="/site.webmanifest">'), 'Must have webmanifest link');
+
+    // Server response headers
+    const linkHeader = res.headers.get('link') || '';
+    assert(linkHeader.includes('https://infrasights.in/'), 'Must have canonical link header');
+    const robotsHeader = res.headers.get('x-robots-tag') || '';
+    assert(robotsHeader.includes('all'), 'Must have X-Robots-Tag header');
+    const nosniffHeader = res.headers.get('x-content-type-options') || '';
+    assert(nosniffHeader === 'nosniff', 'Must have X-Content-Type-Options: nosniff header');
+
+    // Accessible image alt attributes
+    assert(res.body.includes('alt="Infrasights v2.10 App-Wise SAN Path Monitoring Dashboard"'), 'Must have keyword-rich alt on visual element');
     
     // OpenGraph
     assert(res.body.includes('<meta property="og:url" content="https://infrasights.in/">'), 'Must have og:url');
@@ -751,7 +773,29 @@ async function runTests() {
     assert(types.includes('SoftwareApplication'), 'Must include SoftwareApplication in schema');
     assert(types.includes('Organization'), 'Must include Organization in schema');
     assert(types.includes('WebSite'), 'Must include WebSite in schema');
+    assert(types.includes('WebPage'), 'Must include WebPage in schema');
     assert(types.includes('FAQPage'), 'Must include FAQPage in schema');
+    assert(types.includes('BreadcrumbList'), 'Must include BreadcrumbList in schema');
+
+    // WebSite schema fields
+    const website = schemaObj['@graph'].find(item => item['@type'] === 'WebSite');
+    assert(website && website.name === 'Infrasights', 'WebSite must specify name: Infrasights');
+    assert(Array.isArray(website.alternateName) && website.alternateName.includes('Infrasights SAN'), 'WebSite must specify alternateName');
+    assert(website.potentialAction && website.potentialAction['@type'] === 'SearchAction', 'WebSite must have SearchAction');
+
+    // Organization schema fields
+    const org = schemaObj['@graph'].find(item => item['@type'] === 'Organization');
+    assert(org && org.name === 'Infrasights', 'Organization must specify official name: Infrasights');
+    assert(org.url === 'https://infrasights.in/', 'Organization must have canonical URL');
+    assert(org.logo, 'Organization must have logo');
+
+    // SoftwareApplication schema fields
+    const appSchema = schemaObj['@graph'].find(item => item['@type'] === 'SoftwareApplication');
+    assert(appSchema.softwareVersion === '2.10.4', 'SoftwareApplication must have version 2.10.4');
+    assert(appSchema.operatingSystem.includes('Agentless SAN Architecture'), 'SoftwareApplication must state Agentless SAN Architecture');
+    assert(appSchema.applicationCategory.includes('BusinessApplication'), 'SoftwareApplication must have BusinessApplication category');
+    assert(appSchema.offers && appSchema.offers['@type'] === 'Offer', 'SoftwareApplication must have offers for Rich Snippet eligibility');
+    assert(appSchema.aggregateRating && appSchema.aggregateRating['@type'] === 'AggregateRating', 'SoftwareApplication must have aggregateRating for Rich Snippet eligibility');
 
     const faq = schemaObj['@graph'].find(item => item['@type'] === 'FAQPage');
     assert(Array.isArray(faq.mainEntity) && faq.mainEntity.length >= 6, 'FAQPage must contain at least 6 questions');
@@ -837,6 +881,26 @@ async function runTests() {
     assert(regRes.body.data.user.phoneNumber === verifiedPhone, 'User must store verified phone number');
     assert(regRes.body.data.user.phoneVerified === true, 'User phoneVerified must be true');
     assert(typeof regRes.body.data.token === 'string', 'JWT token must be issued');
+  });
+
+  // 45. Web App Manifest: /site.webmanifest
+  await test('GET /site.webmanifest returns 200 with JSON payload and Infrasights identity', async () => {
+    const res = await request('/site.webmanifest');
+    assert(res.status === 200, `Expected 200, got ${res.status}`);
+    const contentType = res.headers.get('content-type') || '';
+    assert(contentType.includes('manifest+json') || contentType.includes('json'), `Expected manifest content-type, got ${contentType}`);
+    const manifest = typeof res.body === 'string' ? JSON.parse(res.body) : res.body;
+    assert(manifest && manifest.name.includes('Infrasights'), 'Manifest must have brand name');
+    assert(manifest.short_name === 'Infrasights', 'Manifest must have short_name: Infrasights');
+    assert(Array.isArray(manifest.icons) && manifest.icons.length >= 2, 'Manifest must declare brand icons');
+  });
+
+  // 46. Security & Crawlability: /vendor web routes enforce X-Robots-Tag: noindex
+  await test('GET /vendor/login enforces X-Robots-Tag: noindex header', async () => {
+    const res = await request('/vendor/login');
+    assert(res.status === 200, `Expected 200, got ${res.status}`);
+    const robotsHeader = res.headers.get('x-robots-tag') || '';
+    assert(robotsHeader.includes('noindex'), 'Vendor routes must enforce noindex to prevent indexing admin portals');
   });
 
   // Teardown

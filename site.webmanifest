@@ -1,0 +1,21 @@
+{
+  "name": "Infrasights — App-Wise SAN Path Monitoring & DC Infrastructure Visibility",
+  "short_name": "Infrasights",
+  "description": "Enterprise App-Wise SAN Path Monitoring and Data Center Infrastructure Visibility Platform",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#080d1a",
+  "theme_color": "#080d1a",
+  "icons": [
+    {
+      "src": "/assets/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

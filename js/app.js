@@ -1542,7 +1542,7 @@ function setupAppWiseDashboard() {
         </div>
         <div class="appwise-card-body">
           <div class="appwise-pie-wrap">
-            <canvas class="appwise-pie-canvas" id="cpie-${app.id}" width="90" height="90"></canvas>
+            <canvas class="appwise-pie-canvas" id="cpie-${app.id}" width="90" height="90" role="img" aria-label="Infrasights App Cluster Pie Chart: ${escapeHtml(app.name)}"></canvas>
           </div>
           <div class="appwise-card-stats">
             <div class="appwise-stat-row">
@@ -1652,7 +1652,7 @@ function setupAppWiseDashboard() {
         </div>
         <div class="appwise-card-body">
           <div class="appwise-pie-wrap">
-            <canvas class="appwise-pie-canvas" id="clpie-${cluster.id}" width="90" height="90"></canvas>
+            <canvas class="appwise-pie-canvas" id="clpie-${cluster.id}" width="90" height="90" role="img" aria-label="Infrasights Host SAN Paths Pie Chart: ${escapeHtml(cluster.name)}"></canvas>
           </div>
           <div class="appwise-card-stats">
             <div class="appwise-stat-row">

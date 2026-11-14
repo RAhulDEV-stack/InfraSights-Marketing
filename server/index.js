@@ -23,6 +23,12 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Global Security & SEO Headers
+app.use((req, res, next) => {
+  res.set('X-Content-Type-Options', 'nosniff');
+  next();
+});
+
 // Request logging in development
 if (process.env.NODE_ENV !== 'production') {
   app.use((req, res, next) => {
@@ -66,19 +72,29 @@ app.use('/assets', express.static(path.join(rootDir, 'assets'), { maxAge: '1h' }
 
 // Serve main landing page
 app.get('/', (req, res) => {
+  res.set('Link', '<https://infrasights.in/>; rel="canonical"');
+  res.set('X-Robots-Tag', 'all, index, follow');
   res.sendFile(path.join(rootDir, 'index.html'));
 });
 app.get('/index.html', (req, res) => {
+  res.set('Link', '<https://infrasights.in/>; rel="canonical"');
+  res.set('X-Robots-Tag', 'all, index, follow');
   res.sendFile(path.join(rootDir, 'index.html'));
 });
 
 // SEO and Web Crawler Directives
 app.get('/sitemap.xml', (req, res) => {
+  res.set('X-Robots-Tag', 'all, index, follow');
   res.type('application/xml').sendFile(path.join(rootDir, 'sitemap.xml'));
 });
 
 app.get('/robots.txt', (req, res) => {
+  res.set('X-Robots-Tag', 'all, index, follow');
   res.type('text/plain').sendFile(path.join(rootDir, 'robots.txt'));
+});
+
+app.get('/site.webmanifest', (req, res) => {
+  res.type('application/manifest+json').sendFile(path.join(rootDir, 'site.webmanifest'));
 });
 
 app.get('/favicon.ico', (req, res) => {
