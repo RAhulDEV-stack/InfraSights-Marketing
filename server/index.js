@@ -93,6 +93,12 @@ app.get('/robots.txt', (req, res) => {
   res.type('text/plain').sendFile(path.join(rootDir, 'robots.txt'));
 });
 
+app.get('/ads.txt', (req, res) => {
+  res.set('X-Robots-Tag', 'all, index, follow');
+  res.set('Cache-Control', 'public, max-age=86400, must-revalidate');
+  res.type('text/plain').sendFile(path.join(rootDir, 'ads.txt'));
+});
+
 app.get('/site.webmanifest', (req, res) => {
   res.type('application/manifest+json').sendFile(path.join(rootDir, 'site.webmanifest'));
 });

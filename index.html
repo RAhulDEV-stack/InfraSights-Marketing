@@ -19,6 +19,14 @@
   <!-- Google Search Console & Bing Webmaster Verification -->
   <meta name="google-site-verification" content="SO6iP0B148xEpKHQp2a6fjkml48lesdczYsywm2Rbgc">
   <meta name="msvalidate.01" content="BING_WEBMASTER_VERIFICATION_TOKEN_HERE">
+
+  <!-- ========================================================================
+       Google AdSense Monetization & Publisher Verification
+       NOTE: Replace 'ca-pub-ADSENSE_PUBLISHER_ID_HERE' with your actual Google AdSense
+       publisher ID (e.g., ca-pub-1234567890123456) when activating live ads.
+       ======================================================================== -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-ADSENSE_PUBLISHER_ID_HERE" crossorigin="anonymous"></script>
+  <meta name="google-adsense-account" content="ca-pub-ADSENSE_PUBLISHER_ID_HERE">
   
   <!-- Canonical URL & Hreflang Language Targeting -->
   <link rel="canonical" href="https://infrasights.in/">
@@ -1227,6 +1235,34 @@
     </section>
 
     <!-- ========================================================================
+         Sponsor Banner: Mid-Page Leaderboard (Between Interface and Personas)
+         ======================================================================== -->
+    <section class="ad-section" aria-label="Sponsored Content">
+      <div class="ad-container">
+        <div class="ad-slot-wrapper">
+          <div class="ad-label">Advertisement</div>
+          <!-- Google AdSense Responsive Unit: Replace slot ID with your AdSense slot -->
+          <ins class="adsbygoogle" style="display:block;" data-ad-client="ca-pub-ADSENSE_PUBLISHER_ID_HERE" data-ad-slot="1234567890" data-ad-format="auto" data-full-width-responsive="true"></ins>
+          <script>
+            try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch (e) {}
+          </script>
+          <!-- Fallback placeholder banner displayed when ad is inactive or pending approval -->
+          <div class="ad-fallback-banner" id="ad-fallback-mid">
+            <div class="ad-fallback-inner">
+              <div class="ad-fallback-badge">
+                <span class="ad-fallback-dot"></span>
+                <span>Enterprise Partner Showcase</span>
+              </div>
+              <p class="ad-fallback-title">Enterprise SAN Observability &amp; Multi-Path Telemetry Solutions</p>
+              <p class="ad-fallback-desc">Explore next-generation zero-agent SAN analytics for mission-critical Cisco MDS &amp; Brocade fabrics.</p>
+              <a href="#deployment" class="ad-fallback-btn">Explore Deployment Options &rarr;</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================
          Who Infrasights Helps (Personas)
          ======================================================================== -->
     <section class="audience-section">
@@ -1306,6 +1342,34 @@
             <div class="step-num">04</div>
             <h3 class="step-title">Deployment & Onboarding</h3>
             <p class="step-desc">Deploy the Infrasights collector appliance and start streaming real-time SAN telemetry in under an hour.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================
+         Sponsor Banner: Pre-FAQ Leaderboard (Above FAQ Section)
+         ======================================================================== -->
+    <section class="ad-section" aria-label="Sponsored Content">
+      <div class="ad-container">
+        <div class="ad-slot-wrapper">
+          <div class="ad-label">Advertisement</div>
+          <!-- Google AdSense Responsive Unit: Replace slot ID with your AdSense slot -->
+          <ins class="adsbygoogle" style="display:block;" data-ad-client="ca-pub-ADSENSE_PUBLISHER_ID_HERE" data-ad-slot="0987654321" data-ad-format="auto" data-full-width-responsive="true"></ins>
+          <script>
+            try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch (e) {}
+          </script>
+          <!-- Fallback placeholder banner displayed when ad is inactive or pending approval -->
+          <div class="ad-fallback-banner" id="ad-fallback-faq">
+            <div class="ad-fallback-inner">
+              <div class="ad-fallback-badge">
+                <span class="ad-fallback-dot"></span>
+                <span>Sponsored Network Intelligence</span>
+              </div>
+              <p class="ad-fallback-title">Zero-Latency Fibre Channel Health &amp; Anomaly Detection</p>
+              <p class="ad-fallback-desc">Automate root-cause isolation across data center storage switches in under 60 seconds.</p>
+              <a href="#deployment" class="ad-fallback-btn">Request Architecture Review &rarr;</a>
+            </div>
           </div>
         </div>
       </div>
@@ -1858,6 +1922,19 @@
       <div class="modal-body" style="font-size:0.85rem;color:var(--text-secondary);line-height:1.6">
         <p>Infrasights respects your enterprise privacy. Information submitted through this website is used solely to evaluate deployment requirements and communicate with authorized requesters.</p>
         <p style="margin-top:0.75rem">Infrasights software operates entirely within your private on-premises management network. Direct switch telemetry remains in your internal environment and is not transmitted to external cloud endpoints unless explicitly contracted.</p>
+
+        <h4 style="color:var(--text-primary);font-size:0.95rem;margin-top:1.25rem;margin-bottom:0.4rem;font-weight:600;">Third-Party Advertising &amp; Google AdSense Compliance</h4>
+        <p>We display third-party advertisements on this website through Google AdSense and its certified advertising partners to support ongoing research and infrastructure documentation. Google and third-party ad networks use cookies, web beacons, and similar technologies to serve advertisements based on your prior visits to this website or other sites on the Internet.</p>
+        <p style="margin-top:0.75rem">Google's use of advertising cookies (including the DoubleClick cookie) enables Google and its ad partners to serve personalized and contextual ads to users based on browsing behavior across digital properties.</p>
+
+        <h4 style="color:var(--text-primary);font-size:0.95rem;margin-top:1.25rem;margin-bottom:0.4rem;font-weight:600;">Personalized Ad Preferences &amp; Opt-Out Rights</h4>
+        <p>You have full control over your advertising preferences and cookie choices:</p>
+        <ul style="margin-top:0.4rem;margin-left:1.25rem;list-style:disc;">
+          <li style="margin-bottom:0.35rem"><strong>Google Ad Settings:</strong> You can opt out of personalized advertising by visiting <a href="https://adssettings.google.com/" target="_blank" rel="noopener noreferrer" style="color:var(--cyan-400);text-decoration:underline;">Google Ads Settings</a>.</li>
+          <li style="margin-bottom:0.35rem"><strong>Digital Advertising Alliance:</strong> You may opt out of third-party ad networks' use of cookies for interest-based advertising via <a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener noreferrer" style="color:var(--cyan-400);text-decoration:underline;">AboutAds.info Choices</a> or the Network Advertising Initiative at <a href="https://optout.networkadvertising.org/" target="_blank" rel="noopener noreferrer" style="color:var(--cyan-400);text-decoration:underline;">Network Advertising Initiative Opt-Out</a>.</li>
+          <li><strong>European Users (EDAA):</strong> EEA and UK visitors can manage ad preferences through the European Interactive Digital Advertising Alliance at <a href="https://www.youronlinechoices.eu/" target="_blank" rel="noopener noreferrer" style="color:var(--cyan-400);text-decoration:underline;">Your Online Choices</a>.</li>
+        </ul>
+        <p style="margin-top:0.75rem">For comprehensive information on how Google collects and processes data in its advertising network, please consult <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener noreferrer" style="color:var(--cyan-400);text-decoration:underline;">Google's Privacy &amp; Terms for Advertising</a>.</p>
       </div>
     </div>
   </div>

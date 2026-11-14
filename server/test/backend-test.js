@@ -903,6 +903,23 @@ async function runTests() {
     assert(robotsHeader.includes('noindex'), 'Vendor routes must enforce noindex to prevent indexing admin portals');
   });
 
+  // 47. Authorized Digital Sellers: /ads.txt Google AdSense verification
+  await test('GET /ads.txt returns 200 with text/plain and Google AdSense declaration', async () => {
+    const res = await request('/ads.txt');
+    assert(res.status === 200, `Expected 200, got ${res.status}`);
+    const contentType = res.headers.get('content-type') || '';
+    assert(contentType.includes('text/plain'), `Expected text/plain content-type, got ${contentType}`);
+    assert(typeof res.body === 'string', 'Body must be text string');
+    assert(res.body.includes('google.com'), 'Must declare google.com digital seller exchange');
+    assert(res.body.includes('pub-ADSENSE_PUBLISHER_ID_HERE'), 'Must declare Google AdSense publisher ID');
+    assert(res.body.includes('DIRECT'), 'Must declare direct relationship');
+    assert(res.body.includes('f08c47fec0942fa0'), 'Must include Google AdSense certification authority ID f08c47fec0942fa0');
+    const robotsHeader = res.headers.get('x-robots-tag') || '';
+    assert(robotsHeader.includes('all') || robotsHeader.includes('index'), 'Must allow web crawlers to read ads.txt');
+    const cacheControl = res.headers.get('cache-control') || '';
+    assert(cacheControl.includes('public') && cacheControl.includes('86400'), 'Must enforce crawler-friendly cache control for ads.txt');
+  });
+
   // Teardown
   serverInstance.close();
 

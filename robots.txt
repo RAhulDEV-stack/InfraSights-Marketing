@@ -23,6 +23,13 @@ Disallow: /vendor/
 Disallow: /server/
 Disallow: /.git/
 
+User-agent: Mediapartners-Google
+Allow: /
+Disallow: /api/
+Disallow: /vendor/
+Disallow: /server/
+Disallow: /.git/
+
 User-agent: *
 Allow: /
 Allow: /assets/

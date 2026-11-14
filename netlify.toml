@@ -85,6 +85,13 @@
     X-Robots-Tag = "all, index, follow"
 
 [[headers]]
+  for = "/ads.txt"
+  [headers.values]
+    Cache-Control = "public, max-age=86400, must-revalidate"
+    Content-Type = "text/plain; charset=utf-8"
+    X-Robots-Tag = "all, index, follow"
+
+[[headers]]
   for = "/site.webmanifest"
   [headers.values]
     Cache-Control = "public, max-age=86400, must-revalidate"

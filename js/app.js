@@ -78,6 +78,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   setupAppWiseDashboard();
   setupFaqAccordion();
   setupModalDismissals();
+  setupAdSenseFallbacks();
   await loadStoredSession();
 });
 
@@ -347,6 +348,48 @@ function setupModalDismissals() {
       document.querySelectorAll('.modal-backdrop.open').forEach(modal => {
         closeModal(modal.id);
       });
+    }
+  });
+}
+
+// Setup Google AdSense Fallback Observers (Zero CLS & Dynamic State Handling)
+function setupAdSenseFallbacks() {
+  const adWrappers = document.querySelectorAll('.ad-slot-wrapper');
+  adWrappers.forEach((wrapper) => {
+    const ins = wrapper.querySelector('ins.adsbygoogle');
+    const fallback = wrapper.querySelector('.ad-fallback-banner');
+    if (!ins || !fallback) return;
+
+    const checkFilledState = () => {
+      const status = ins.getAttribute('data-ad-status');
+      if (status === 'unfilled') {
+        fallback.style.display = 'flex';
+        ins.style.display = 'none';
+        wrapper.classList.remove('ad-filled');
+      } else if (status === 'filled') {
+        fallback.style.display = 'none';
+        ins.style.display = 'block';
+        wrapper.classList.add('ad-filled');
+      } else {
+        // Pending / uninitialized state:
+        // Only consider filled if an iframe with positive height is rendered
+        const iframe = ins.querySelector('iframe');
+        if (iframe && (iframe.clientHeight > 0 || iframe.offsetHeight > 0)) {
+          fallback.style.display = 'none';
+          ins.style.display = 'block';
+          wrapper.classList.add('ad-filled');
+        } else {
+          fallback.style.display = 'flex';
+          wrapper.classList.remove('ad-filled');
+        }
+      }
+    };
+
+    checkFilledState();
+
+    if (window.MutationObserver) {
+      const observer = new MutationObserver(checkFilledState);
+      observer.observe(ins, { childList: true, attributes: true, attributeFilter: ['data-ad-status'] });
     }
   });
 }
