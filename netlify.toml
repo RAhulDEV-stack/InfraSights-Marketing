@@ -24,6 +24,13 @@
     Referrer-Policy = "strict-origin-when-cross-origin"
     Permissions-Policy = "camera=(), microphone=(), geolocation=()"
     Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
+    X-Robots-Tag = "all"
+
+# Edge Performance: Preconnect Hints on Landing Page
+[[headers]]
+  for = "/"
+  [headers.values]
+    Link = "<https://fonts.googleapis.com>; rel=preconnect, <https://fonts.gstatic.com>; rel=preconnect; crossorigin"
 
 # Long-term immutable caching for static assets
 [[headers]]
@@ -41,6 +48,12 @@
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
+# Favicon Caching
+[[headers]]
+  for = "/favicon.*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800, must-revalidate"
+
 # Never cache HTML to ensure instant updates on deployment
 [[headers]]
   for = "/*.html"
@@ -56,6 +69,19 @@
   for = "/robots.txt"
   [headers.values]
     Cache-Control = "public, max-age=86400, must-revalidate"
+
+# ==============================================================================
+# Block Direct Access to Sensitive Server Code
+# ==============================================================================
+[[redirects]]
+  from = "/server/*"
+  to = "/index.html"
+  status = 404
+
+[[redirects]]
+  from = "/.git/*"
+  to = "/index.html"
+  status = 404
 
 # ==============================================================================
 # Domain Canonicalization (Redirect www to apex domain infrasights.in)

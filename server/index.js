@@ -81,6 +81,14 @@ app.get('/robots.txt', (req, res) => {
   res.type('text/plain').sendFile(path.join(rootDir, 'robots.txt'));
 });
 
+app.get('/favicon.ico', (req, res) => {
+  res.sendFile(path.join(rootDir, 'favicon.ico'));
+});
+
+app.get('/favicon.svg', (req, res) => {
+  res.type('image/svg+xml').sendFile(path.join(rootDir, 'favicon.svg'));
+});
+
 // Catch-all for non-whitelisted routes across all HTTP methods
 app.use((req, res) => {
   if (req.path.startsWith('/api')) {

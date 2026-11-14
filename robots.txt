@@ -2,4 +2,9 @@ User-agent: *
 Allow: /
 Disallow: /api/
 Disallow: /vendor/
+Disallow: /server/
+Disallow: /.git/
+
+# Host Directives & Canonical Sitemap
+Host: https://infrasights.in
 Sitemap: https://infrasights.in/sitemap.xml
